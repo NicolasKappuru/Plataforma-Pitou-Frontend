@@ -1,0 +1,26 @@
+.header {
+    height: 60px;
+    background-color: var(--bg-surface);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    flex-shrink: 0;
+}
+
+.header__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header__app-name {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.header__actions {
+    display: flex;
+    align-items: center;
+}

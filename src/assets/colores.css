@@ -1,0 +1,54 @@
+Fondos
+css--bg-app:        #0a0d14;  /* fondo general de la app */
+--bg-surface:    #0d1120;  /* sidebar y header */
+--bg-card:       rgba(255, 255, 255, 0.03);  /* tarjetas de contenido */
+--bg-input:      rgba(255, 255, 255, 0.04);  /* searchbox */
+--bg-active:     rgba(255, 255, 255, 0.06);  /* item activo del sidebar */
+
+
+Bordes
+css--border-soft:   rgba(255, 255, 255, 0.06);  /* separadores generales */
+--border-faint:  rgba(255, 255, 255, 0.05);  /* bordes más sutiles */
+--border-input:  rgba(255, 255, 255, 0.08);  /* borde del searchbox */
+--border-active: #7b8fc0;                    /* línea derecha del item activo */
+
+Texto
+css--text-primary:  #c8d4f0;  /* texto principal, títulos */
+--text-muted:    rgba(168, 180, 208, 0.6);   /* texto secundario */
+--text-faint:    rgba(168, 180, 208, 0.4);   /* items inactivos del sidebar */
+--text-hint:     rgba(168, 180, 208, 0.25);  /* placeholders, hints */
+--text-label:    rgba(168, 180, 208, 0.25);  /* labels de sección */
+Acento / marca
+css--accent:        #7b8fc0;  /* color principal azul-grisáceo */
+--accent-logo:   #a8b4d0;  /* logo y avatar */
+Categorías (tags)
+css--cat-blue:      #7b8fc0;  /* POO */
+--cat-green:     #8bbfa0;  /* Redes */
+--cat-purple:    #b89ac0;  /* Patrones */
+
+Te recomiendo guardarlos como variables CSS en un archivo global:
+css/* src/assets/variables.css */
+:root {
+  --bg-app:        #0a0d14;
+  --bg-surface:    #0d1120;
+  --bg-card:       rgba(255, 255, 255, 0.03);
+  --bg-input:      rgba(255, 255, 255, 0.04);
+  --bg-active:     rgba(255, 255, 255, 0.06);
+
+  --border-soft:   rgba(255, 255, 255, 0.06);
+  --border-faint:  rgba(255, 255, 255, 0.05);
+  --border-input:  rgba(255, 255, 255, 0.08);
+  --border-active: #7b8fc0;
+
+  --text-primary:  #c8d4f0;
+  --text-muted:    rgba(168, 180, 208, 0.6);
+  --text-faint:    rgba(168, 180, 208, 0.4);
+  --text-hint:     rgba(168, 180, 208, 0.25);
+
+  --accent:        #7b8fc0;
+  --accent-logo:   #a8b4d0;
+
+  --cat-blue:      #7b8fc0;
+  --cat-green:     #8bbfa0;
+  --cat-purple:    #b89ac0;
+}

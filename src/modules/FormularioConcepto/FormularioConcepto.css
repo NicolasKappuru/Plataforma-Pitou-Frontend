@@ -1,0 +1,14 @@
+.contenedor-form-concepto{
+    margin: 30px 60px 20px;
+}
+
+.titulo-form-concepto{
+    text-align: center;
+    color: var(--text-primary)
+}
+
+.btn-editar-crear{
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}

@@ -1,0 +1,148 @@
+.usuario-list {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.usuario-list__tabla {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 32px 0;
+}
+
+.usuario-list__header {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;
+    gap: 16px;
+    padding: 0 16px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-hint);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.usuario-list__body {
+    display: flex;
+    flex-direction: column;
+}
+
+.usuario-list__fila {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;
+    gap: 16px;
+    align-items: center;
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border-soft);
+    transition: background-color 0.15s ease;
+}
+
+.usuario-list__fila:hover {
+    background-color: var(--bg-active);
+}
+
+.usuario-list__usuario {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.usuario-list__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.usuario-list__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.usuario-list__nombre {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.usuario-list__handle {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.usuario-list__badge {
+    padding: 3px 10px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: capitalize;
+    white-space: nowrap;
+}
+
+.usuario-list__glosario {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.usuario-list__glosario--si {
+    color: #8bbfa0;
+}
+
+.usuario-list__glosario--no {
+    color: var(--text-hint);
+}
+
+.usuario-list__estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.usuario-list__estado-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.usuario-list__estado--activo {
+    color: #8bbfa0;
+}
+
+.usuario-list__estado--activo .usuario-list__estado-dot {
+    background-color: #8bbfa0;
+}
+
+.usuario-list__estado--inactivo {
+    color: var(--text-muted);
+}
+
+.usuario-list__estado--inactivo .usuario-list__estado-dot {
+    background-color: var(--text-faint);
+}
+
+
+.usuario-list__footer {
+    border-top: 1px solid var(--border-soft);
+    padding: 20px 0;
+}

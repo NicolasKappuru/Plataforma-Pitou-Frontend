@@ -1,0 +1,16 @@
+.concepto-list {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.concepto-list__items {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.concepto-list__footer {
+    border-top: 1px solid var(--border-soft);
+    padding: 20px 0;
+}

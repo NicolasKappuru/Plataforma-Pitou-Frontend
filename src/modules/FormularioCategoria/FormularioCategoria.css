@@ -1,0 +1,17 @@
+.contenedor-form-categoria {
+	padding: 20px;
+    margin: 30px 60px 20px;
+
+}
+
+.titulo-form-categoria {
+	margin: 10px 0 18px 0;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.btn-crear-editar-categoria{
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}

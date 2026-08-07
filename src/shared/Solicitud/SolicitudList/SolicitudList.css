@@ -1,0 +1,144 @@
+.solicitud-list {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.solicitud-list__tabla {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 32px 0;
+}
+
+.solicitud-list__header {
+    display: grid;
+    grid-template-columns: 80px 2fr 1fr 1.5fr;
+    gap: 16px;
+    padding: 0 16px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-hint);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.solicitud-list__body {
+    display: flex;
+    flex-direction: column;
+}
+
+.solicitud-list__fila {
+    display: grid;
+    grid-template-columns: 80px 2fr 1fr 1.5fr;
+    gap: 16px;
+    align-items: center;
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border-soft);
+    transition: background-color 0.15s ease;
+}
+
+.solicitud-list__fila:hover {
+    background-color: var(--bg-active);
+}
+
+.solicitud-list__id {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-hint);
+    font-variant-numeric: tabular-nums;
+}
+
+.solicitud-list__autor {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.solicitud-list__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.solicitud-list__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.solicitud-list__nombre {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.solicitud-list__handle {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.solicitud-list__estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.solicitud-list__estado-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.solicitud-list__estado--pendiente {
+    color: #c0a07b;
+}
+.solicitud-list__estado--pendiente .solicitud-list__estado-dot {
+    background-color: #c0a07b;
+}
+
+.solicitud-list__estado--aceptada {
+    color: #8bbfa0;
+}
+.solicitud-list__estado--aceptada .solicitud-list__estado-dot {
+    background-color: #8bbfa0;
+}
+
+.solicitud-list__estado--rechazada {
+    color: #c07b8f;
+}
+.solicitud-list__estado--rechazada .solicitud-list__estado-dot {
+    background-color: #c07b8f;
+}
+
+.solicitud-list__acciones {
+    display: flex;
+    gap: 8px;
+}
+
+
+.solicitud-list__resuelta {
+    font-size: 14px;
+    color: var(--text-hint);
+}
+
+.solicitud-list__footer {
+    border-top: 1px solid var(--border-soft);
+    padding: 20px 0;
+}

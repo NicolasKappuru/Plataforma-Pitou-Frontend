@@ -1,0 +1,69 @@
+/* Reuse styles from ConceptoForm for consistency */
+.contenedor-formulario {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 100%;
+	border: 4px solid var(--border-soft);
+	border-radius: 12px;
+}
+
+.nombre-categoria {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	margin: 30px 60px 20px;
+	margin-bottom: 30px;
+}
+
+.label-nombre {
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--text-muted);
+	margin-bottom: 4px;
+}
+
+.input-nombre {
+	background-color: var(--bg-input);    
+	border: 1px solid var(--border-input);
+	border-radius: 8px;
+
+	padding: 10px 14px;
+	font-size: 15px;
+	color: var(--text-primary);
+}
+
+.color-categoria {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin: 30px 60px 20px;
+	width: 420px;
+}
+
+.label-categoria {
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--text-muted);
+}
+
+.vista-previa {
+	margin: 20px 60px;
+}
+
+.preview-tag {
+	padding: 8px 12px;
+	border-radius: 8px;
+	border: 1px solid var(--border-input);
+	font-weight: 700;
+}
+
+.categoria-form .btn-editar-crear{
+	margin: 30px 60px 20px;
+	justify-content: center;
+	align-items: center;
+}
+
+.btn-crear-editar-categoria{
+    margin: 30px 60px 20px;
+}

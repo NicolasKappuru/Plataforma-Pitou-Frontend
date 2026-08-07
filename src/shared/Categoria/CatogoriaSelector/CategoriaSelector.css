@@ -1,0 +1,124 @@
+.select-container {
+  width: 100%;
+  position: relative;
+}
+
+.select-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.select-input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 15px;
+  outline: none;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.select-input::placeholder {
+  color: var(--text-muted);
+}
+
+.select-input:focus {
+  border-color: var(--border-active);
+  box-shadow: 0 0 0 1px rgba(123, 143, 192, 0.2);
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.select-input:-webkit-autofill,
+.select-input:-webkit-autofill:hover,
+.select-input:-webkit-autofill:focus,
+.select-input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--text-primary) !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-input) inset !important;
+  caret-color: var(--text-primary) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.select-options {
+  position: absolute;
+  top: calc(100% + 6px);
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+  max-height: 260px;
+  overflow-y: auto;
+  z-index: 50;
+  padding: 6px;
+}
+
+.select-option {
+  padding: 4px 0;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.option-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: var(--text-primary);
+}
+
+.option-content.active {
+  background: var(--bg-active);
+}
+
+.option-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.selected-category-tag,
+.category-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  text-align: center;
+}
+
+.selected-category-tag {
+  flex-shrink: 0;
+}
+.option-check {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.no-results {
+  padding: 10px 8px;
+  color: var(--text-muted);
+  font-size: 14px;
+}

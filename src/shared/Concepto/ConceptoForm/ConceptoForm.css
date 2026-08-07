@@ -1,0 +1,86 @@
+/* El formulario consta de a divs con los elementos para la creacion del concepto */
+
+.contenedor-formulario {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    border: 4px solid var(--border-soft);
+    border-radius: 12px;
+
+}
+
+/* Nombre del concepto */
+
+.nombre-concepto {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 30px 60px 20px;
+    margin-bottom: 30px;
+}
+
+.label-nombre {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.input-nombre {
+    background-color: var(--bg-input);    
+    border: 1px solid var(--border-input);
+    border-radius: 8px;
+
+    padding: 10px 14px;
+    font-size: 15px;
+    color: var(--text-primary);
+}
+
+
+/* Categoria del concepto */
+
+.categoria-concepto-form {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 30px 60px 20px;
+    margin-bottom: 30px;
+    width: 400px;
+}
+
+.label-categoria {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.categoria-concepto-form .select-container {
+    width: 100%;
+}
+
+
+
+/* Descripcion del concepto */
+
+.descripcion-concepto {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 30px 60px 20px;
+}
+
+.label-descripcion {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+/* Boton para confirmar la accion */
+
+.btn-editar-crear{
+    margin: 30px 60px 20px;
+    justify-content: center;
+    align-items: center;
+}

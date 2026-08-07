@@ -1,0 +1,22 @@
+.main-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.main-layout__body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.main-layout__content {
+    flex: 1;
+    overflow-y: auto;
+    background-color: #0a0d14;
+}
+
+
+.prueba{
+    width: 300px;
+}

@@ -1,0 +1,19 @@
+.categoria-list {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.categoria-list__items {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px 32px 0;
+    align-content: start;
+}
+
+.categoria-list__footer {
+    border-top: 1px solid var(--border-soft);
+    padding: 20px 0;
+}

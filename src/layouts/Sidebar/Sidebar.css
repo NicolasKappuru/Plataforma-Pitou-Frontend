@@ -1,0 +1,12 @@
+.sidebar {
+    background-color: var(--bg-surface);
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow-y: auto;
+}
+
+.sidebar button:last-child {
+    margin-top: auto;
+}

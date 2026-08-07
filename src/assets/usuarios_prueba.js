@@ -1,0 +1,17 @@
+export const usuariosPrueba = [
+  { id: 1,  nombre: "María López",     rol: "admin",      tieneGlosario: true,  estado: "activo"   },
+  { id: 2,  nombre: "Carlos Ruiz",     rol: "moderador",  tieneGlosario: true,  estado: "activo"   },
+  { id: 3,  nombre: "Ana Torres",      rol: "estudiante", tieneGlosario: false, estado: "inactivo" },
+  { id: 4,  nombre: "Lucía Méndez",    rol: "estudiante", tieneGlosario: true,  estado: "activo"   },
+  { id: 5,  nombre: "Diego Herrera",   rol: "moderador",  tieneGlosario: false, estado: "activo"   },
+  { id: 6,  nombre: "Sofía Castillo",  rol: "estudiante", tieneGlosario: true,  estado: "inactivo" },
+  { id: 7,  nombre: "Martín Pérez",    rol: "estudiante", tieneGlosario: false, estado: "activo"   },
+  { id: 8,  nombre: "Valentina Soto",  rol: "admin",      tieneGlosario: true,  estado: "activo"   },
+  { id: 9,  nombre: "Nicolás Cruz",    rol: "estudiante", tieneGlosario: true,  estado: "activo"   },
+  { id: 10, nombre: "Camila Vargas",   rol: "moderador",  tieneGlosario: true,  estado: "inactivo" },
+  { id: 11, nombre: "Rodrigo Mora",    rol: "estudiante", tieneGlosario: false, estado: "activo"   },
+  { id: 12, nombre: "Isabella Rojas",  rol: "estudiante", tieneGlosario: true,  estado: "activo"   },
+  { id: 13, nombre: "Felipe Navarro",  rol: "moderador",  tieneGlosario: false, estado: "inactivo" },
+  { id: 14, nombre: "Daniela Reyes",   rol: "estudiante", tieneGlosario: true,  estado: "activo"   },
+  { id: 15, nombre: "Sebastián Vega",  rol: "estudiante", tieneGlosario: false, estado: "activo"   },
+]
