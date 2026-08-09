@@ -68,6 +68,18 @@ const MenuAcciones = ({ entidad, data, concepto, onEliminar }) => {
     }
   }
 
+  const handleOrdenarConceptos = (e) => {
+    e.stopPropagation();
+    setAbierto(false);
+    console.log(entidadData);
+    navigate("/ordenar/conceptos", {
+      
+      state: {
+        categoria: entidadData
+      }
+    });
+  };
+
   return (
     <div className="menu-acciones" ref={ref}>
       <button className="menu-acciones__trigger" onClick={toggle}>
@@ -88,6 +100,16 @@ const MenuAcciones = ({ entidad, data, concepto, onEliminar }) => {
             variant="sidebar"
             onClick={(e) => handleAccion(e, "Eliminar")}
           />
+
+           {String(entidad).toLowerCase().includes("categor") && (
+            <Boton
+              label="Ordenar conceptos"
+              icon="list"
+              variant="sidebar"
+              onClick={handleOrdenarConceptos}
+            />
+          )}
+          
         </div>
       )}
 

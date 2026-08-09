@@ -102,6 +102,8 @@ const GlosarioPropio = () => {
 
                         descripcion: concepto.descripcion_concepto,
 
+                        posicion: concepto.posicion,
+
                         categoria:
                             concepto.categoria?.titulo_categoria
                             || "Sin categoría",

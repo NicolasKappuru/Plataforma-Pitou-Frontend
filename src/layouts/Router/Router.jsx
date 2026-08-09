@@ -20,6 +20,7 @@ import GlosarioAutor from "../../modules/GlosarioAutor/GlosarioAutor"
 import FormularioConcepto from "../../modules/FormularioConcepto/FormularioConcepto";
 import FormularioCategoria from "../../modules/FormularioCategoria/FormularioCategoria";
 import VistaConceptoDetalle from "../../modules/VistaConceptoDetalle/VistaConceptoDetalle";
+import VistaOrdenConceptos from "../../modules/VistaOrdenConceptos/VistaOrdenConceptos";
 
 
 const Router = () => {
@@ -40,7 +41,8 @@ const Router = () => {
           <Route path="/glosario/categorias" element={<CategoriasPropias/>} />
           <Route path="/formulario/concepto" element={<FormularioConcepto/>} />  
           <Route path="/formulario/categoria" element={<FormularioCategoria/>} />  
-          <Route path="/concepto/detalle" element={<VistaConceptoDetalle/>} />     
+          <Route path="/concepto/detalle" element={<VistaConceptoDetalle/>} />    
+          <Route path="/ordenar/conceptos" element={<VistaOrdenConceptos/>} />
         </Route>
 
       </Routes>
