@@ -11,6 +11,7 @@ import "./FormularioCategoria.css";
 const FormularioCategoria = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
+	console.log("STATE CATEGORIA:", location.state);
 	const formValuesRef = useRef({ titulo: "", color: "#7b8fc0" });
 	const isSubmittingRef = useRef(false);
 	const modo = location.state?.modo || "crear";
@@ -55,7 +56,10 @@ const FormularioCategoria = () => {
 
 			completedSuccessfully = true;
 			await new Promise((resolve) => window.setTimeout(resolve, 900));
-			navigate("/glosario/categorias");
+			
+			navigate(location.state?.returnTo || "/glosario/categorias");
+
+	
 		} catch (error) {
 			console.error("Error al guardar categoría:", error);
 			setAlerta({ visible: true, message: "No se pudo completar la operación", color: "#dc2626" });
@@ -96,7 +100,7 @@ const FormularioCategoria = () => {
 				<Boton
                     label="Cancelar"
                     variant="form_action"
-                    onClick={console.log("boton")}
+                    onClick={() => navigate(location.state?.returnTo || "/glosario/categorias")}
                     type="button"
                 />
 			</div>

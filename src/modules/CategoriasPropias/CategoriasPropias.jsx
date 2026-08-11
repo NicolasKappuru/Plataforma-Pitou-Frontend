@@ -10,7 +10,6 @@ import buscarCategoriasPorPalabraClave from "./service/service_buscar_categorias
 
 import "./CategoriasPropias.css";
 
-
 const CategoriasPropias = () => {
 
     const navigate = useNavigate();
@@ -35,110 +34,133 @@ const CategoriasPropias = () => {
     const handleNav = (path, state) => {
         navigate(path, { state });
     };
-    /*
-        Leer filtros desde URL
-    */
+
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-        const palabraFromUrl = params.get("palabra_clave");
-        if (palabraFromUrl) {
-            setPalabraClave(palabraFromUrl);
-        } else {
 
-            setPalabraClave(null);
-        }
-        setPaginaActual(1);
+        const palabraFromUrl = params.get("palabra_clave");
+        const paginaFromUrl = Number(params.get("page")) || 1;
+
+        setPalabraClave(palabraFromUrl);
+        setPaginaActual(paginaFromUrl);
+
     }, [location.search]);
 
-    /*
-        Cargar categorías
-    */
+
     useEffect(() => {
         const cargarCategorias = async () => {
+
             setLoading(true);
             setError("");
+
             try {
+
+                const params = new URLSearchParams(location.search);
+                const pagina = Number(params.get("page")) || 1;
+
                 let data;
+
                 if (palabraClave) {
                     data = await buscarCategoriasPorPalabraClave({
-                        page: paginaActual,
+                        page: pagina,
                         glosario: 1,
                         palabra_clave: palabraClave
-
                     });
                 } else {
                     data = await buscarCategoriasDefecto({
-                        page: paginaActual,
+                        page: pagina,
                         glosario: 1
                     });
                 }
-                const categoriasNormalizadas = (data.results || []).map((categoria) => ({
 
+                const categoriasNormalizadas = (data.results || []).map((categoria) => ({
                     id: categoria.id,
                     titulo: categoria.titulo_categoria,
                     color: categoria.color || "#7b8fc0",
                     conceptos: categoria.numero_conceptos ?? 0,
                     esMia: true
-
                 }));
+
                 const totalPaginasCalculado = Math.max(
                     1,
                     Math.ceil((data.count || 0) / POR_PAGINA)
                 );
+
                 if (
                     categoriasNormalizadas.length === 0 &&
-                    paginaActual > 1
+                    pagina > 1
                 ) {
-                    setPaginaActual((prev) => Math.max(1, prev - 1));
+                    const params = new URLSearchParams(location.search);
+                    params.set("page", pagina - 1);
+
+                    navigate(
+                        `${location.pathname}?${params.toString()}`
+                    );
+
                     return;
                 }
+
                 setCategorias(categoriasNormalizadas);
                 setTotalPaginas(totalPaginasCalculado);
-                setPaginaActual((prev) =>
-                    Math.min(prev, totalPaginasCalculado)
-                );
+
             } catch (err) {
                 console.error(
                     "Error al cargar categorías:",
                     err
                 );
+
                 setCategorias([]);
                 setError(
                     "No se pudieron cargar las categorías."
                 );
+
             } finally {
                 setLoading(false);
             }
         };
+
         cargarCategorias();
+
     }, [
-        paginaActual,
+        location.search,
         palabraClave,
         refreshKey
     ]);
 
+
     const handleBusquedaTexto = (texto) => {
         navigate(
-            `${location.pathname}?palabra_clave=${texto}`
+            `${location.pathname}?palabra_clave=${texto}&page=1`
         );
-
     };
+
 
     const handleCambioPagina = (pagina) => {
-        setPaginaActual(pagina);
+
+        const params = new URLSearchParams(location.search);
+
+        params.set("page", pagina);
+
+        navigate(
+            `${location.pathname}?${params.toString()}`
+        );
     };
+
 
     const refrescarCategorias = () => {
         setRefreshKey((prev) => prev + 1);
     };
 
+
     return (
         <div>
+
             <h2 className="titulo-categorias-propias">
                 Categorías
             </h2>
 
             <div className="acciones-categoria-propia">
+
                 <div className="space-search-bar">
                     <SearchBar
                         onSearch={handleBusquedaTexto}
@@ -156,10 +178,13 @@ const CategoriasPropias = () => {
                         )
                     }
                 />
+
             </div>
+
             {loading && (
                 <p>Cargando categorías...</p>
             )}
+
             {error && (
                 <p>{error}</p>
             )}
@@ -173,6 +198,7 @@ const CategoriasPropias = () => {
                     onEliminar={refrescarCategorias}
                 />
             )}
+
         </div>
     );
 };

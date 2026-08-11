@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import "./MenuAcciones.css"
 import Boton from "../Boton/Boton"
 import eliminarConcepto from "../MensajeConfirmacion/services/service_eliminar_concepto"
@@ -9,6 +9,7 @@ const MenuAcciones = ({ entidad, data, concepto, onEliminar, onEstadoMenu }) => 
   const [abierto, setAbierto] = useState(false)
   const ref = useRef(null)
   const navigate = useNavigate()
+  const location = useLocation()
   const entidadData = data ?? concepto
 
   useEffect(() => {
@@ -38,11 +39,22 @@ const MenuAcciones = ({ entidad, data, concepto, onEliminar, onEstadoMenu }) => 
     if (accion === "Editar") {
       const lower = String(entidad || "").toLowerCase();
       if (lower.includes("categoria") || lower.includes("categor")) {
-        navigate("/formulario/categoria", { state: { modo: "editar", categoria: entidadData } })
+        navigate("/formulario/categoria", { state: 
+          { modo: "editar", 
+            categoria: entidadData,
+            returnTo: location.pathname + location.search
+          } })
         return
       }
 
-      navigate("/formulario/concepto", { state: { modo: "editar", concepto: entidadData } })
+      navigate("/formulario/concepto", {
+          state: {
+              modo: "editar",
+              concepto: entidadData,
+              returnTo: location.pathname + location.search
+          }
+      })
+      
       return
     }
 
