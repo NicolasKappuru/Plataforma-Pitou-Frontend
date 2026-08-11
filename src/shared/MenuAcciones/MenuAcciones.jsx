@@ -92,7 +92,9 @@ const MenuAcciones = ({ entidad, data, concepto, onEliminar, onEstadoMenu }) => 
     navigate("/ordenar/conceptos", {
       
       state: {
-        categoria: entidadData
+        categoria: entidadData,
+        returnTo: location.pathname + location.search
+
       }
     });
   };

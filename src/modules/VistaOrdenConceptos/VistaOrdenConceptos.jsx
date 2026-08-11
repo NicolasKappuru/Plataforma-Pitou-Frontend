@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import TablaOrdenConceptos from "../../shared/TablaOrdenConceptos/TablaOrdenConceptos";
 import Boton from "../../shared/Boton/Boton";
@@ -13,7 +13,10 @@ import "./VistaOrdenConceptos.css";
 const VistaOrdenConceptos = () => {
 
     const location = useLocation();
+    const navigate = useNavigate();
+
     const categoria = location.state?.categoria;
+    const returnTo = location.state?.returnTo || "/glosario/categorias";
 
     const [conceptosOriginales, setConceptosOriginales] = useState([]);
     const [conceptosActuales, setConceptosActuales] = useState([]);
@@ -84,6 +87,11 @@ const VistaOrdenConceptos = () => {
     }, [categoria]);
 
 
+    const volver = () => {
+        navigate(returnTo);
+    };
+
+
     const handleActualizarPosiciones = async () => {
 
         const posicionesActualizadas = conceptosActuales
@@ -131,12 +139,18 @@ const VistaOrdenConceptos = () => {
             setConceptosOriginales(conceptosActuales);
 
 
+            window.setTimeout(() => {
+                volver();
+            }, 900);
+
+
         } catch (error) {
 
             console.error(
                 "Error actualizando posiciones:",
                 error
             );
+
 
             setAlerta({
                 visible: true,
@@ -150,9 +164,7 @@ const VistaOrdenConceptos = () => {
 
 
     const handleCancelar = () => {
-
-        setConceptosActuales(conceptosOriginales);
-
+        volver();
     };
 
 
@@ -194,10 +206,12 @@ const VistaOrdenConceptos = () => {
 
             {!loading && !error && (
                 <div className="tabla-ordenamiento-conceptos">
+
                     <TablaOrdenConceptos
                         conceptos={conceptosActuales}
                         onCambioOrden={setConceptosActuales}
                     />
+
                 </div>
             )}
 
@@ -210,6 +224,7 @@ const VistaOrdenConceptos = () => {
                     onClick={handleActualizarPosiciones}
                     type="button"
                 />
+
 
                 <Boton
                     label="Cancelar"
