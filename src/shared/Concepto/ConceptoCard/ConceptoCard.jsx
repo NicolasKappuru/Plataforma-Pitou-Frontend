@@ -1,8 +1,11 @@
 import "./ConceptoCard.css"
 import MenuAcciones from "../../MenuAcciones/MenuAcciones"
 
+import { useState } from "react";
 
 const ConceptoCard = ({ concepto, titulo, descripcion, categoria, color, autor, onClick, onEliminar }) => {
+
+  const [menuAbierto, setMenuAbierto] = useState(false);
 
   function convertirJsonATextoPlano(contenido) {
     if (!contenido || !contenido.content) {
@@ -29,7 +32,10 @@ const ConceptoCard = ({ concepto, titulo, descripcion, categoria, color, autor, 
   }
 
   return (
-    <div className="concepto-card" onClick={onClick}>
+    <div 
+      className={`concepto-card ${menuAbierto ? "concepto-card--menu-abierto" : ""}`} 
+      onClick={onClick}
+    >
       <div className="concepto-card_dot" style={{ backgroundColor: color }} />
 
       <div className="concepto-card__body">
@@ -41,7 +47,12 @@ const ConceptoCard = ({ concepto, titulo, descripcion, categoria, color, autor, 
         <span className="concepto-card__tag" style={tagStyle}>{categoria}</span>
         {autor
           ? <span className="concepto-card__tag concepto-card__tag--secondary">{autor}</span>
-          : <div className="concepto-card__menu"><MenuAcciones entidad="concepto" data={concepto} onEliminar={onEliminar} /></div>
+          : <MenuAcciones 
+                entidad="concepto" 
+                data={concepto} 
+                onEliminar={onEliminar}
+                onEstadoMenu={setMenuAbierto}
+            />
         }
       </div>
     </div>

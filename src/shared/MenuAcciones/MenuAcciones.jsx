@@ -5,7 +5,7 @@ import Boton from "../Boton/Boton"
 import eliminarConcepto from "../MensajeConfirmacion/services/service_eliminar_concepto"
 import eliminarCategoria from "../MensajeConfirmacion/services/service_eliminar_categoria"
 
-const MenuAcciones = ({ entidad, data, concepto, onEliminar }) => {
+const MenuAcciones = ({ entidad, data, concepto, onEliminar, onEstadoMenu }) => {
   const [abierto, setAbierto] = useState(false)
   const ref = useRef(null)
   const navigate = useNavigate()
@@ -20,8 +20,13 @@ const MenuAcciones = ({ entidad, data, concepto, onEliminar }) => {
   }, [])
 
   const toggle = (e) => {
-    e.stopPropagation()
-    setAbierto((prev) => !prev)
+      e.stopPropagation()
+
+      setAbierto((prev) => {
+          const nuevoEstado = !prev
+          onEstadoMenu?.(nuevoEstado)
+          return nuevoEstado
+      })
   }
 
   const nombreEntidad = typeof entidad === "string" ? entidad : "concepto"

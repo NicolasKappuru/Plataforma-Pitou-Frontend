@@ -59,3 +59,11 @@
     right: 8px;
     z-index: 10;
 }
+
+.categoria-card {
+    z-index: 1;
+}
+
+.categoria-card--menu-abierto {
+    z-index: 1000;
+}
