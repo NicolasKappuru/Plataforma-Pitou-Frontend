@@ -1,0 +1,75 @@
+
+Ejemplo URL: http://localhost:8000//plugins/concepto/57/plugins/
+
+Response esperado
+
+{
+    "concepto": 57,
+    "plugins": [
+        {
+            "id": 1,
+            "nombre_plugin": "Secuencia",
+            "descripcion_plugin": "Secuencia del algoritmo burbuja",
+            "posicion": 0,
+            "url_imagen": "https://hyzvsiuostfynzrogxbj.supabase.co/storage/v1/object/public/PlataformaPitouImages/conceptos/84b23368-da65-4f3c-9c63-218faf066908.png",
+            "concepto": 57,
+            "tipo_plugin": "imagen"
+        },
+        {
+            "id": 2,
+            "nombre_plugin": "Cuadricula de burbuja",
+            "descripcion_plugin": "Secuencia por medio de tabla de burbuja",
+            "posicion": 1,
+            "url_imagen": "https://hyzvsiuostfynzrogxbj.supabase.co/storage/v1/object/public/PlataformaPitouImages/conceptos/15885bef-d3e5-4c82-92f4-1e1f9ca07167.png",
+            "concepto": 57,
+            "tipo_plugin": "imagen"
+        },
+        {
+            "id": 1,
+            "nombre_plugin": "Bubble Sort",
+            "descripcion_plugin": "Implementación de burbuja",
+            "posicion": 2,
+            "contenido_codigo": "def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    return arr",
+            "lenguaje_programacion": "python",
+            "concepto": 57,
+            "tipo_plugin": "bloque_codigo"
+        },
+        {
+            "id": 2,
+            "nombre_plugin": "Quick Sort",
+            "descripcion_plugin": "Implementación rápida",
+            "posicion": 3,
+            "contenido_codigo": "function quickSort(arr) {\n  if (arr.length <= 1) return arr;\n  const pivot = arr[0];\n  const left = [];\n  const right = [];\n  for (let i = 1; i < arr.length; i++) {\n    arr[i] < pivot ? left.push(arr[i]) : right.push(arr[i]);\n  }\n  return [...quickSort(left), pivot, ...quickSort(right)];\n}",
+            "lenguaje_programacion": "javascript",
+            "concepto": 57,
+            "tipo_plugin": "bloque_codigo"
+        },
+        {
+            "id": 1,
+            "nombre_plugin": "Fórmula cuadrática",
+            "descripcion_plugin": "Para ecuaciones ax² + bx + c = 0",
+            "posicion": 4,
+            "expresion_formula": "x = (-b ± √(b² - 4ac)) / 2a",
+            "concepto": 57,
+            "tipo_plugin": "formula"
+        },
+        {
+            "id": 2,
+            "nombre_plugin": "Área del círculo",
+            "descripcion_plugin": "Cálculo del área",
+            "posicion": 5,
+            "expresion_formula": "A = π · r²",
+            "concepto": 57,
+            "tipo_plugin": "formula"
+        },
+        {
+            "id": 3,
+            "nombre_plugin": "Ecuación cuadrática",
+            "descripcion_plugin": "Para ecuaciones ax² + bx + c = 0",
+            "posicion": 6,
+            "expresion_formula": "x¨2",
+            "concepto": 57,
+            "tipo_plugin": "formula"
+        }
+    ]
+}

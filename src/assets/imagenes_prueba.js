@@ -1,6 +1,3 @@
-import imagen1 from "../static/imagen1.jpg";
-import imagen2 from "../static/imagen2.jpeg";
-
 export const imagenesPrueba = [
   {
     id: 1,
@@ -8,7 +5,7 @@ export const imagenesPrueba = [
     descripcion_plugin:
       "Diagrama de flujo que representa el algoritmo de ordenamiento burbuja, mostrando cada iteración y las comparaciones entre pares de elementos adyacentes.",
     posicion: 0,
-    url_imagen: imagen1,
+    url_imagen: "/favicon.svg",
     concepto: 1,
   },
   {
@@ -17,7 +14,7 @@ export const imagenesPrueba = [
     descripcion_plugin:
       "Captura de pantalla del resultado de la ejecución del algoritmo, donde se observa la lista ordenada que produce la consola del navegador.",
     posicion: 1,
-    url_imagen: imagen2,
+    url_imagen: "/favicon.svg",
     concepto: 1,
   },
 ];

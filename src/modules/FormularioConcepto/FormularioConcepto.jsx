@@ -1,10 +1,12 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ConceptoForm from "../../shared/Concepto/ConceptoForm/ConceptoForm";
 import Boton from "../../shared/Boton/Boton";
 import MensajeAlerta from "../../shared/MensajeAlerta/MensajeAlerta";
 import crearConcepto from "./services/service_crear_concepto";
 import actualizarConcepto from "./services/service_actualizar_concepto";
+import listarPluginsConcepto from "../../plugins/services/service_listar_plugins_concepto";
+import guardarPluginsConcepto from "../../plugins/services/service_guardar_plugins_concepto";
 
 import "./FormularioConcepto.css";
 
@@ -15,8 +17,35 @@ const FormularioConcepto = () => {
     const isSubmittingRef = useRef(false);
     const [alerta, setAlerta] = useState({ visible: false, message: "", color: "#16a34a" });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [plugins, setPlugins] = useState([]);
+    const [pluginsIniciales, setPluginsIniciales] = useState([]);
     const modo = location.state?.modo || "crear";
     const valoresIniciales = modo === "editar" ? location.state?.concepto : undefined;
+
+    useEffect(() => {
+        if (modo !== "editar" || !valoresIniciales?.id) return undefined;
+
+        let cancelado = false;
+        const cargarPlugins = async () => {
+            try {
+                const pluginsCargados = await listarPluginsConcepto(valoresIniciales.id);
+                if (!cancelado) {
+                    setPlugins(pluginsCargados);
+                    setPluginsIniciales(pluginsCargados);
+                }
+            } catch (error) {
+                console.error("Error al cargar plugins del concepto:", error);
+                if (!cancelado) {
+                    setAlerta({ visible: true, message: "No se pudieron cargar los plugins del concepto", color: "#dc2626" });
+                }
+            }
+        };
+
+        cargarPlugins();
+        return () => {
+            cancelado = true;
+        };
+    }, [modo, valoresIniciales?.id]);
 
     const iniciarEnvio = () => {
         if (isSubmittingRef.current) return false;
@@ -29,6 +58,12 @@ const FormularioConcepto = () => {
     const finalizarEnvio = () => {
         isSubmittingRef.current = false;
         setIsSubmitting(false);
+    };
+
+    const actualizarPluginEnEstado = (plugin) => {
+        setPlugins((previos) => previos.map((item) => (
+            `${item.tipo}-${item.id}` === `${plugin.tipo}-${plugin.id}` ? plugin : item
+        )));
     };
 
     const handleSubmit = async (formData) => {
@@ -48,9 +83,19 @@ const FormularioConcepto = () => {
                     id: valoresIniciales?.id,
                     ...payload,
                 });
+                await guardarPluginsConcepto({
+                    concepto: valoresIniciales?.id,
+                    plugins,
+                    pluginsIniciales,
+                });
                 setAlerta({ visible: true, message: "Concepto actualizado correctamente", color: "#16a34a" });
             } else {
-                await crearConcepto(payload);
+                const conceptoCreado = await crearConcepto(payload);
+                const conceptoId = conceptoCreado?.id || conceptoCreado?.concepto?.id;
+                if (!conceptoId) {
+                    throw new Error("El backend no devolvió el id del concepto creado");
+                }
+                await guardarPluginsConcepto({ concepto: conceptoId, plugins });
                 setAlerta({ visible: true, message: "Concepto creado correctamente", color: "#16a34a" });
             }
 
@@ -77,7 +122,18 @@ const FormularioConcepto = () => {
                 {modo === "editar" ? "Editar concepto" : "Crear concepto"}
             </h2>
             <MensajeAlerta visible={alerta.visible} message={alerta.message} color={alerta.color} />
-            <ConceptoForm valoresIniciales={valoresIniciales} modo={modo} onSubmit={handleSubmit} formRef={formRef} />
+            <ConceptoForm
+                key={valoresIniciales?.id || "nuevo"}
+                valoresIniciales={valoresIniciales}
+                modo={modo}
+                onSubmit={handleSubmit}
+                formRef={formRef}
+                plugins={plugins}
+                onAgregarPlugin={(plugin) => setPlugins((previos) => [...previos, plugin])}
+                onActualizarPlugin={actualizarPluginEnEstado}
+                onEliminarPlugin={(plugin) => setPlugins((previos) => previos.filter((item) => `${item.tipo}-${item.id}` !== `${plugin.tipo}-${plugin.id}`))}
+                onCambioOrdenPlugins={setPlugins}
+            />
             </div>
 
             <div className="btn-editar-crear">

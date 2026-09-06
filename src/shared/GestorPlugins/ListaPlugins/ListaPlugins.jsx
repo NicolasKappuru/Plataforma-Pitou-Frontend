@@ -7,7 +7,7 @@ import PluginCard from "../../../plugins/Plugin/PluginCard/PluginCard";
 const claveDe = (plugin) => `${plugin?.tipo}-${plugin?.id}`;
 
 const normalizarItems = (lista) =>
-	lista.map((plugin, index) => ({ ...plugin, posicion: index }));
+	lista.map((plugin, index) => ({ ...plugin, posicion: plugin.posicion ?? index }));
 
 const esVacio = (plugin) => {
 	if (plugin.nombre_plugin?.trim()) return false;

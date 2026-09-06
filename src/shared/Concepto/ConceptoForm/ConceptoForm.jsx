@@ -1,16 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CategoriaSelector from "../../Categoria/CatogoriaSelector/CategoriaSelector";
 import EditorTextoEnriquecido from "../../EditorTextoEnriquecido/EditorTextoEnriquecido";
 
 import "./ConceptoForm.css";
 
-//Pruebas
 import ListaPlugins from "../../../shared/GestorPlugins/ListaPlugins/ListaPlugins";
 import { opcionesPlugins } from "../../../assets/opciones_plugins";
-import { imagenesPrueba } from "../../../assets/imagenes_prueba";
-import { bloquesCodigo } from "../../../assets/bloques_codigo";
-import { formulasPruebas } from "../../../assets/formulas_pruebas";
-
 
 
 const contenidoVacio = {
@@ -38,7 +33,16 @@ const normalizarCategoria = (categoria) => {
     };
 };
 
-const ConceptoForm = ({ valoresIniciales, modo = "crear", onSubmit, formRef }) => {
+const ConceptoForm = ({
+    valoresIniciales,
+    onSubmit,
+    formRef,
+    plugins,
+    onAgregarPlugin,
+    onActualizarPlugin,
+    onEliminarPlugin,
+    onCambioOrdenPlugins,
+}) => {
     const [form, setForm] = useState(() => {
         const inicial = valoresIniciales || {};
 
@@ -48,16 +52,6 @@ const ConceptoForm = ({ valoresIniciales, modo = "crear", onSubmit, formRef }) =
             descripcion: inicial.descripcion || contenidoVacio,
         };
     });
-
-    useEffect(() => {
-        const inicial = valoresIniciales || {};
-
-        setForm({
-            nombre: inicial.titulo || inicial.nombre || "",
-            categoria: normalizarCategoria(inicial.categoria),
-            descripcion: inicial.descripcion || contenidoVacio,
-        });
-    }, [valoresIniciales]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -76,13 +70,6 @@ const ConceptoForm = ({ valoresIniciales, modo = "crear", onSubmit, formRef }) =
         event.preventDefault();
         onSubmit?.(form, event);
     };
-
-
-    const pluginsDemo = [
-    ...imagenesPrueba.map((plugin) => ({ ...plugin, tipo: "imagen" })),
-    ...bloquesCodigo.map((plugin) => ({ ...plugin, tipo: "bloque_codigo" })),
-    ...formulasPruebas.map((plugin) => ({ ...plugin, tipo: "formula" })),
-    ];
 
 
     return (
@@ -116,7 +103,14 @@ const ConceptoForm = ({ valoresIniciales, modo = "crear", onSubmit, formRef }) =
             
             
             <div className="gestor-plugins">
-                 <ListaPlugins plugins={pluginsDemo} opciones={opcionesPlugins} /> 
+                  <ListaPlugins
+                    plugins={plugins}
+                    opciones={opcionesPlugins}
+                    onAgregar={onAgregarPlugin}
+                    onActualizar={onActualizarPlugin}
+                    onEliminar={onEliminarPlugin}
+                    onCambioOrden={onCambioOrdenPlugins}
+                  />
             </div>
         
 
