@@ -1,0 +1,50 @@
+.plugin-card {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	padding: 12px 14px;
+	background: var(--bg-card);
+	border: 1px solid var(--text-faint);
+	border-radius: 8px;
+	transition: border-color 0.15s, background-color 0.15s;
+}
+
+.plugin-card:hover {
+	border-color: var(--text-muted);
+	background: var(--bg-active);
+}
+
+.plugin-card__nombre {
+	flex: 0 0 70%;
+	min-width: 0;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding-right: 16px;
+}
+
+.plugin-card__nombre .ti {
+	flex-shrink: 0;
+	font-size: 20px;
+	color: var(--text-muted);
+}
+
+.plugin-card__texto {
+	flex: 1;
+	min-width: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 15px;
+	font-weight: 600;
+	color: var(--text-primary);
+	line-height: 1.35;
+}
+
+.plugin-card__acciones {
+	flex: 0 0 30%;
+	min-width: 0;
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+}

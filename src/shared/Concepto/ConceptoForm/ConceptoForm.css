@@ -84,3 +84,11 @@
     justify-content: center;
     align-items: center;
 }
+
+/* Gestor de plugins */
+
+.gestor-plugins {
+    margin: 30px 60px 20px;
+    justify-content: center;
+    align-items: center;
+}

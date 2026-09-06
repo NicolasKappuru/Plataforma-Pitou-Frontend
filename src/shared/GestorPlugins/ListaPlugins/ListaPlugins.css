@@ -1,0 +1,67 @@
+.lista-plugins {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	width: 100%;
+}
+
+.lista-plugins__items {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.lista-plugins__fila {
+	display: flex;
+	align-items: stretch;
+	gap: 8px;
+}
+
+.lista-plugins__orden {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 4px;
+}
+
+.lista-plugins__flecha {
+	width: 26px;
+	height: 26px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid var(--text-faint);
+	border-radius: 50%;
+	background: var(--bg-input);
+	color: var(--text-muted);
+	font-size: 14px;
+	cursor: pointer;
+	transition: opacity 0.15s, background-color 0.15s, color 0.15s;
+}
+
+.lista-plugins__flecha:hover:not(:disabled) {
+	opacity: 0.85;
+	background: var(--bg-active);
+	color: var(--text-primary);
+}
+
+.lista-plugins__flecha:disabled {
+	opacity: 0.3;
+	cursor: default;
+}
+
+.lista-plugins__contenido {
+	flex: 1;
+	min-width: 0;
+}
+
+.lista-plugins__form {
+	width: 100%;
+}
+
+.lista-plugins__form-acciones {
+	display: flex;
+	justify-content: center;
+	gap: 14px;
+	margin: 14px 0 4px;
+}

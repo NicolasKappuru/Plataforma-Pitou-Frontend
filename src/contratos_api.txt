@@ -1,0 +1,649 @@
+"""
+CONTRATOS DE API - PLUGINS
+===========================
+Documentación de endpoints para los plugins:
+- gestor_imagenes
+- gestor_bloques_codigo
+- gestor_formulas
+
+Autenticación: JWT Bearer Token en header Authorization
+Permisos RBAC: consultar, crear, actualizar, eliminar
+"""
+
+# =============================================================================
+# GESTOR DE IMÁGENES
+# =============================================================================
+# Base URL: /api/plugins/gestor_imagenes/imagen/
+# Content-Type: multipart/form-data (POST/PUT con archivos) o application/json
+
+"""
+LISTAR IMÁGENES POR CONCEPTO
+-----------------------------
+GET /api/plugins/gestor_imagenes/imagen/?concepto=1
+
+Headers:
+  Authorization: Bearer <jwt_token>
+
+Response 200:
+{
+  "imagenes": [
+    {
+      "id": 1,
+      "nombre_plugin": "Diagrama de flujo",
+      "descripcion_plugin": "Diagrama del algoritmo de ordenamiento",
+      "posicion": 0,
+      "url_imagen": "https://supabase.co/storage/v1/object/public/bucket/imagenes/abc123.png",
+      "concepto": 1
+    },
+    {
+      "id": 2,
+      "nombre_plugin": "Captura de pantalla",
+      "descripcion_plugin": "Resultado de la ejecución",
+      "posicion": 1,
+      "url_imagen": "https://supabase.co/storage/v1/object/public/bucket/imagenes/def456.png",
+      "concepto": 1
+    }
+  ]
+}
+
+Response 400: {"error": "Debe enviar un concepto o un id"}
+Response 403: {"error": "No tiene permiso para consultar"}
+Response 404: {"error": "Concepto no encontrado"}
+"""
+
+"""
+OBTENER IMAGEN POR ID
+----------------------
+GET /api/plugins/gestor_imagenes/imagen/1/
+
+Headers:
+  Authorization: Bearer <jwt_token>
+
+Response 200:
+{
+  "id": 1,
+  "nombre_plugin": "Diagrama de flujo",
+  "descripcion_plugin": "Diagrama del algoritmo de ordenamiento",
+  "posicion": 0,
+  "url_imagen": "https://supabase.co/storage/v1/object/public/bucket/imagenes/abc123.png",
+  "concepto": 1
+}
+
+Response 403: {"error": "No tiene permiso para consultar"}
+Response 404: {"error": "Imagen no encontrada"}
+"""
+
+"""
+CREAR IMÁGENES (1-5 ARCHIVOS)
+------------------------------
+POST /api/plugins/gestor_imagenes/imagen/
+
+Headers:
+  Authorization: Bearer <jwt_token>
+  Content-Type: multipart/form-data
+
+Form Data (multipart/form-data):
+  concepto: "1"                                    (requerido, ID del concepto)
+  imagenes: <archivo1.png>                         (requerido, 1-5 archivos)
+  imagenes: <archivo2.jpg>
+  nombre_plugin: "Diagrama 1"                      (opcional, por cada archivo)
+  nombre_plugin: "Diagrama 2"
+  descripcion_plugin: "Descripción 1"              (opcional)
+  descripcion_plugin: "Descripción 2"
+  posicion: "0"                                    (opcional, por defecto índice)
+  posicion: "1"
+
+Ejemplo cURL:
+curl -X POST "http://localhost:8000/api/plugins/gestor_imagenes/imagen/" \
+  -H "Authorization: Bearer <jwt_token>" \
+  -F "concepto=1" \
+  -F "imagenes=@/ruta/imagen1.png" \
+  -F "imagenes=@/ruta/imagen2.jpg" \
+  -F "nombre_plugin=Diagrama 1" \
+  -F "nombre_plugin=Diagrama 2" \
+  -F "descripcion_plugin=Desc 1" \
+  -F "descripcion_plugin=Desc 2"
+
+Response 201:
+{
+  "imagenes": [
+    {
+      "id": 10,
+      "nombre_plugin": "Diagrama 1",
+      "descripcion_plugin": "Desc 1",
+      "posicion": 0,
+      "url_imagen": "https://supabase.co/storage/v1/object/public/bucket/imagenes/uuid1.png",
+      "concepto": 1
+    },
+    {
+      "id": 11,
+      "nombre_plugin": "Diagrama 2",
+      "descripcion_plugin": "Desc 2",
+      "posicion": 1,
+      "url_imagen": "https://supabase.co/storage/v1/object/public/bucket/imagenes/uuid2.jpg",
+      "concepto": 1
+    }
+  ]
+}
+
+Response 400: {"error": "Debe enviar al menos una imagen"} / {"error": "Debe enviar entre 1 y 5 imágenes"}
+Response 403: {"error": "No tiene permiso para crear"}
+"""
+
+"""
+ACTUALIZAR IMÁGENES (1-5)
+--------------------------
+PUT /api/plugins/gestor_imagenes/imagen/
+
+Headers:
+  Authorization: Bearer <jwt_token>
+  Content-Type: application/json  (o multipart/form-data si se suben nuevos archivos)
+
+Body (JSON):
+{
+  "imagenes": [
+    {
+      "id": 10,
+      "nombre_plugin": "Diagrama actualizado",
+      "descripcion_plugin": "Nueva descripción",
+      "posicion": 2,
+      "archivo": null
+    },
+    {
+      "id": 11,
+      "nombre_plugin": "Otra imagen",
+      "posicion": 3
+    }
+  ]
+}
+
+NOTA: Para reemplazar el archivo, enviar en multipart/form-data:
+  imagenes: [{"id": 10, "nombre_plugin": "Nuevo", "archivo": <file>}]
+
+Response 200:
+{
+  "imagenes": [
+    {
+      "id": 10,
+      "nombre_plugin": "Diagrama actualizado",
+      "descripcion_plugin": "Nueva descripción",
+      "posicion": 2,
+      "url_imagen": "https://supabase.co/storage/v1/object/public/bucket/imagenes/uuid1.png",
+      "concepto": 1
+    },
+    {
+      "id": 11,
+      "nombre_plugin": "Otra imagen",
+      "descripcion_plugin": "Desc 2",
+      "posicion": 3,
+      "url_imagen": "https://supabase.co/storage/v1/object/public/bucket/imagenes/uuid2.jpg",
+      "concepto": 1
+    }
+  ]
+}
+
+Response 400: {"error": "Debe enviar entre 1 y 5 imágenes para actualizar"} / {"error": "Cada imagen debe incluir el id"}
+Response 403: {"error": "No tiene permiso para actualizar"}
+Response 404: {"error": "Imagen no encontrada"}
+"""
+
+"""
+ELIMINAR IMÁGENES
+------------------
+DELETE /api/plugins/gestor_imagenes/imagen/
+
+Headers:
+  Authorization: Bearer <jwt_token>
+  Content-Type: application/json
+
+Body (JSON):
+{
+  "ids": [10, 11]
+}
+
+O también acepta:
+- Form data: ids=10&ids=11
+- JSON simple: {"ids": "10"} (string o número)
+
+Response 200:
+{"message": "Imágenes eliminadas"}
+
+Response 400: {"error": "Debe enviar al menos un id de imagen"}
+Response 403: {"error": "No tiene permiso para eliminar"}
+Response 404: {"error": "Imagen no encontrada"}
+"""
+
+# =============================================================================
+# GESTOR DE BLOQUES DE CÓDIGO
+# =============================================================================
+# Base URL: /api/plugins/gestor_bloques_codigo/bloque_codigo/
+# Content-Type: application/json
+
+"""
+LISTAR BLOQUES DE CÓDIGO POR CONCEPTO
+--------------------------------------
+GET /api/plugins/gestor_bloques_codigo/bloque_codigo/?concepto=1
+
+Headers:
+  Authorization: Bearer <jwt_token>
+
+Response 200:
+{
+  "bloques_codigo": [
+    {
+      "id": 1,
+      "nombre_plugin": "Bubble Sort",
+      "descripcion_plugin": "Implementación de burbuja",
+      "posicion": 0,
+      "contenido_codigo": "def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    return arr",
+      "lenguaje_programacion": "python",
+      "concepto": 1
+    },
+    {
+      "id": 2,
+      "nombre_plugin": "Quick Sort",
+      "descripcion_plugin": "Implementación rápida",
+      "posicion": 1,
+      "contenido_codigo": "function quickSort(arr) {\n  if (arr.length <= 1) return arr;\n  const pivot = arr[0];\n  const left = [];\n  const right = [];\n  for (let i = 1; i < arr.length; i++) {\n    arr[i] < pivot ? left.push(arr[i]) : right.push(arr[i]);\n  }\n  return [...quickSort(left), pivot, ...quickSort(right)];\n}",
+      "lenguaje_programacion": "javascript",
+      "concepto": 1
+    }
+  ]
+}
+
+Response 400: {"error": "Debe enviar un concepto o un id"}
+Response 403: {"error": "No tiene permiso para consultar"}
+"""
+
+"""
+OBTENER BLOQUE DE CÓDIGO POR ID
+--------------------------------
+GET /api/plugins/gestor_bloques_codigo/bloque_codigo/1/
+
+Headers:
+  Authorization: Bearer <jwt_token>
+
+Response 200:
+{
+  "id": 1,
+  "nombre_plugin": "Bubble Sort",
+  "descripcion_plugin": "Implementación de burbuja",
+  "posicion": 0,
+  "contenido_codigo": "def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    return arr",
+  "lenguaje_programacion": "python",
+  "concepto": 1
+}
+
+Response 403: {"error": "No tiene permiso para consultar"}
+Response 404: {"error": "Bloque de código no encontrado"}
+"""
+
+"""
+CREAR BLOQUES DE CÓDIGO (1-5)
+------------------------------
+POST /api/plugins/gestor_bloques_codigo/bloque_codigo/
+
+Headers:
+  Authorization: Bearer <jwt_token>
+  Content-Type: application/json
+
+Body (JSON) - Opción A: Array de bloques:
+{
+  "bloques_codigo": [
+    {
+      "nombre_plugin": "Bubble Sort",
+      "descripcion_plugin": "Ordenamiento burbuja",
+      "posicion": 0,
+      "lenguaje_programacion": "python",
+      "contenido_codigo": "def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    return arr",
+      "concepto": 1
+    },
+    {
+      "nombre_plugin": "Merge Sort",
+      "descripcion_plugin": "Ordenamiento mezcla",
+      "posicion": 1,
+      "lenguaje_programacion": "python",
+      "contenido_codigo": "def merge_sort(arr):\n    if len(arr) <= 1:\n        return arr\n    mid = len(arr) // 2\n    left = merge_sort(arr[:mid])\n    right = merge_sort(arr[mid:])\n    return merge(left, right)",
+      "concepto": 1
+    }
+  ]
+}
+
+Body (JSON) - Opción B: Bloque individual (se envuelve automáticamente):
+{
+  "nombre_plugin": "Bubble Sort",
+  "descripcion_plugin": "Ordenamiento burbuja",
+  "posicion": 0,
+  "lenguaje_programacion": "python",
+  "contenido_codigo": "def bubble_sort(arr):\n    return sorted(arr)",
+  "concepto": 1
+}
+
+Body (JSON) - Opción C: Con concepto en raíz:
+{
+  "concepto": 1,
+  "bloques_codigo": [...]
+}
+
+Response 201:
+{
+  "bloques_codigo": [
+    {
+      "id": 10,
+      "nombre_plugin": "Bubble Sort",
+      "descripcion_plugin": "Ordenamiento burbuja",
+      "posicion": 0,
+      "contenido_codigo": "def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    return arr",
+      "lenguaje_programacion": "python",
+      "concepto": 1
+    }
+  ]
+}
+
+Response 400: {"error": "Debe enviar entre 1 y 5 bloques de código"} / {"error": "Cada bloque debe ser un objeto válido"}
+Response 403: {"error": "No tiene permiso para crear"}
+"""
+
+"""
+ACTUALIZAR BLOQUES DE CÓDIGO (1-5)
+-----------------------------------
+PUT /api/plugins/gestor_bloques_codigo/bloque_codigo/
+
+Headers:
+  Authorization: Bearer <jwt_token>
+  Content-Type: application/json
+
+Body (JSON):
+{
+  "bloques_codigo": [
+    {
+      "id": 10,
+      "nombre_plugin": "Bubble Sort Optimizado",
+      "descripcion_plugin": "Versión mejorada",
+      "posicion": 0,
+      "contenido_codigo": "def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        swapped = False\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n                swapped = True\n        if not swapped:\n            break\n    return arr",
+      "lenguaje_programacion": "python"
+    },
+    {
+      "id": 11,
+      "posicion": 2
+    }
+  ]
+}
+
+Response 200:
+{
+  "bloques_codigo": [
+    {
+      "id": 10,
+      "nombre_plugin": "Bubble Sort Optimizado",
+      "descripcion_plugin": "Versión mejorada",
+      "posicion": 0,
+      "contenido_codigo": "def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        swapped = False\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n                swapped = True\n        if not swapped:\n            break\n    return arr",
+      "lenguaje_programacion": "python",
+      "concepto": 1
+    }
+  ]
+}
+
+Response 400: {"error": "Debe enviar entre 1 y 5 bloques de código para actualizar"} / {"error": "Cada bloque debe incluir el id"}
+Response 403: {"error": "No tiene permiso para actualizar"}
+Response 404: {"error": "Bloque de código no encontrado"}
+"""
+
+"""
+ELIMINAR BLOQUES DE CÓDIGO
+---------------------------
+DELETE /api/plugins/gestor_bloques_codigo/bloque_codigo/
+
+Headers:
+  Authorization: Bearer <jwt_token>
+  Content-Type: application/json
+
+Body (JSON):
+{
+  "ids": [10, 11]
+}
+
+O también acepta:
+- ids como array: {"ids": [10, 11]}
+- ids como número: {"ids": 10}
+- Form data: ids=10&ids=11
+
+Response 200:
+{"message": "Bloques de código eliminados"}
+
+Response 400: {"error": "Debe enviar al menos un id de bloque"}
+Response 403: {"error": "No tiene permiso para eliminar"}
+Response 404: {"error": "Bloque de código no encontrado"}
+"""
+
+# =============================================================================
+# GESTOR DE FÓRMULAS
+# =============================================================================
+# Base URL: /api/plugins/gestor_formulas/formula/
+# Content-Type: application/json
+
+"""
+LISTAR FÓRMULAS POR CONCEPTO
+-----------------------------
+GET /api/plugins/gestor_formulas/formula/?concepto=1
+
+Headers:
+  Authorization: Bearer <jwt_token>
+
+Response 200:
+{
+  "formulas": [
+    {
+      "id": 1,
+      "nombre_plugin": "Fórmula cuadrática",
+      "descripcion_plugin": "Resolución de ecuaciones de segundo grado",
+      "posicion": 0,
+      "expresion_formula": "x = (-b ± √(b² - 4ac)) / 2a",
+      "concepto": 1
+    },
+    {
+      "id": 2,
+      "nombre_plugin": "Teorema de Pitágoras",
+      "descripcion_plugin": "Relación en triángulos rectángulos",
+      "posicion": 1,
+      "expresion_formula": "a² + b² = c²",
+      "concepto": 1
+    }
+  ]
+}
+
+Response 400: {"error": "Debe enviar un concepto o un id"}
+Response 403: {"error": "No tiene permiso para consultar"}
+"""
+
+"""
+OBTENER FÓRMULA POR ID
+-----------------------
+GET /api/plugins/gestor_formulas/formula/1/
+
+Headers:
+  Authorization: Bearer <jwt_token>
+
+Response 200:
+{
+  "id": 1,
+  "nombre_plugin": "Fórmula cuadrática",
+  "descripcion_plugin": "Resolución de ecuaciones de segundo grado",
+  "posicion": 0,
+  "expresion_formula": "x = (-b ± √(b² - 4ac)) / 2a",
+  "concepto": 1
+}
+
+Response 403: {"error": "No tiene permiso para consultar"}
+Response 404: {"error": "Fórmula no encontrada"}
+"""
+
+"""
+CREAR FÓRMULAS (1-5)
+---------------------
+POST /api/plugins/gestor_formulas/formula/
+
+Headers:
+  Authorization: Bearer <jwt_token>
+  Content-Type: application/json
+
+Body (JSON) - Opción A: Array de fórmulas:
+{
+  "formulas": [
+    {
+      "nombre_plugin": "Fórmula cuadrática",
+      "descripcion_plugin": "Para ecuaciones ax² + bx + c = 0",
+      "posicion": 0,
+      "expresion_formula": "x = (-b ± √(b² - 4ac)) / 2a",
+      "concepto": 1
+    },
+    {
+      "nombre_plugin": "Área del círculo",
+      "descripcion_plugin": "Cálculo del área",
+      "posicion": 1,
+      "expresion_formula": "A = π · r²",
+      "concepto": 1
+    }
+  ]
+}
+
+Body (JSON) - Opción B: Fórmula individual:
+{
+  "nombre_plugin": "Volumen de esfera",
+  "descripcion_plugin": "Cálculo del volumen",
+  "posicion": 0,
+  "expresion_formula": "V = (4/3) · π · r³",
+  "concepto": 1
+}
+
+Body (JSON) - Opción C: Con concepto en raíz:
+{
+  "concepto": 1,
+  "formulas": [...]
+}
+
+Response 201:
+{
+  "formulas": [
+    {
+      "id": 10,
+      "nombre_plugin": "Fórmula cuadrática",
+      "descripcion_plugin": "Para ecuaciones ax² + bx + c = 0",
+      "posicion": 0,
+      "expresion_formula": "x = (-b ± √(b² - 4ac)) / 2a",
+      "concepto": 1
+    }
+  ]
+}
+
+Response 400: {"error": "Debe enviar entre 1 y 5 fórmulas"} / {"error": "Cada fórmula debe ser un objeto válido"}
+Response 403: {"error": "No tiene permiso para crear"}
+"""
+
+"""
+ACTUALIZAR FÓRMULAS (1-5)
+--------------------------
+PUT /api/plugins/gestor_formulas/formula/
+
+Headers:
+  Authorization: Bearer <jwt_token>
+  Content-Type: application/json
+
+Body (JSON):
+{
+  "formulas": [
+    {
+      "id": 10,
+      "nombre_plugin": "Fórmula cuadrática general",
+      "descripcion_plugin": "Versión completa con discriminante",
+      "posicion": 0,
+      "expresion_formula": "x = (-b ± √(b² - 4ac)) / 2a  ;  Δ = b² - 4ac"
+    },
+    {
+      "id": 11,
+      "posicion": 2
+    }
+  ]
+}
+
+Response 200:
+{
+  "formulas": [
+    {
+      "id": 10,
+      "nombre_plugin": "Fórmula cuadrática general",
+      "descripcion_plugin": "Versión completa con discriminante",
+      "posicion": 0,
+      "expresion_formula": "x = (-b ± √(b² - 4ac)) / 2a  ;  Δ = b² - 4ac",
+      "concepto": 1
+    }
+  ]
+}
+
+Response 400: {"error": "Debe enviar entre 1 y 5 fórmulas para actualizar"} / {"error": "Cada fórmula debe incluir el id"}
+Response 403: {"error": "No tiene permiso para actualizar"}
+Response 404: {"error": "Fórmula no encontrada"}
+"""
+
+"""
+ELIMINAR FÓRMULAS
+------------------
+DELETE /api/plugins/gestor_formulas/formula/
+
+Headers:
+  Authorization: Bearer <jwt_token>
+  Content-Type: application/json
+
+Body (JSON):
+{
+  "ids": [10, 11]
+}
+
+O también acepta:
+- ids como array: {"ids": [10, 11]}
+- ids como número: {"ids": 10}
+- Form data: ids=10&ids=11
+
+Response 200:
+{"message": "Fórmulas eliminadas"}
+
+Response 400: {"error": "Debe enviar al menos un id de fórmula"}
+Response 403: {"error": "No tiene permiso para eliminar"}
+Response 404: {"error": "Fórmula no encontrada"}
+"""
+
+# =============================================================================
+# RESUMEN DE CÓDIGOS DE ESTADO COMUNES
+# =============================================================================
+"""
+200 OK          - Consulta/Actualización exitosa
+201 Created     - Creación exitosa
+400 Bad Request - Datos inválidos, faltantes o límite excedido (max 5 items)
+401 Unauthorized- Token JWT inválido o expirado
+403 Forbidden   - Sin permiso requerido (consultar/crear/actualizar/eliminar)
+404 Not Found   - Recurso no encontrado
+500 Internal    - Error del servidor
+
+LÍMITES:
+- Máximo 5 items por request (crear/actualizar)
+- Archivos de imagen: máximo 5, tipos permitidos según configuración Supabase
+"""
+
+# =============================================================================
+# EJEMPLOS DE PERMISOS REQUERIDOS
+# =============================================================================
+"""
+Todas las vistas usan el decorador @requiere_permiso('permiso'):
+
+GET    -> requiere_permiso('consultar')
+POST   -> requiere_permiso('crear')
+PUT    -> requiere_permiso('actualizar')
+DELETE -> requiere_permiso('eliminar')
+
+Roles y permisos por defecto:
+- administrador: todos los permisos
+- autor: consultar, crear, actualizar, eliminar (sus propios recursos)
+- lector: solo consultar
+"""

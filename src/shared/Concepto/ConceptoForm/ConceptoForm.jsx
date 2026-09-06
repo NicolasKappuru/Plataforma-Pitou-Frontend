@@ -4,6 +4,15 @@ import EditorTextoEnriquecido from "../../EditorTextoEnriquecido/EditorTextoEnri
 
 import "./ConceptoForm.css";
 
+//Pruebas
+import ListaPlugins from "../../../shared/GestorPlugins/ListaPlugins/ListaPlugins";
+import { opcionesPlugins } from "../../../assets/opciones_plugins";
+import { imagenesPrueba } from "../../../assets/imagenes_prueba";
+import { bloquesCodigo } from "../../../assets/bloques_codigo";
+import { formulasPruebas } from "../../../assets/formulas_pruebas";
+
+
+
 const contenidoVacio = {
     type: "doc",
     content: [{ type: "paragraph", content: [{ type: "text", text: "" }] }],
@@ -68,6 +77,14 @@ const ConceptoForm = ({ valoresIniciales, modo = "crear", onSubmit, formRef }) =
         onSubmit?.(form, event);
     };
 
+
+    const pluginsDemo = [
+    ...imagenesPrueba.map((plugin) => ({ ...plugin, tipo: "imagen" })),
+    ...bloquesCodigo.map((plugin) => ({ ...plugin, tipo: "bloque_codigo" })),
+    ...formulasPruebas.map((plugin) => ({ ...plugin, tipo: "formula" })),
+    ];
+
+
     return (
         <div className="contenedor-formulario">
             <form ref={formRef} className="concepto-form" onSubmit={handleSubmit}>
@@ -96,6 +113,13 @@ const ConceptoForm = ({ valoresIniciales, modo = "crear", onSubmit, formRef }) =
                     <EditorTextoEnriquecido content={form.descripcion} onChange={handleDescripcion} />
                 </div>
             </form>
+            
+            {/*
+            <div className="gestor-plugins">
+                 <ListaPlugins plugins={pluginsDemo} opciones={opcionesPlugins} /> 
+            </div>
+        */}
+
         </div>
     );
 };
