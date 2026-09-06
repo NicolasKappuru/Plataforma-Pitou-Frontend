@@ -3,7 +3,7 @@ import "./ImagenForm.css";
 import UploadOption from "../UploadOption/UploadOption";
 import Boton from "../../../shared/Boton/Boton";
 
-const ImagenForm = ({ plugin, modo = "crear", onSubmit, onCancelar }) => {
+const ImagenForm = ({ plugin, modo = "crear", onSubmit }) => {
 	const [form, setForm] = useState(() => ({
 		nombre_plugin: plugin?.nombre_plugin || "",
 		descripcion_plugin: plugin?.descripcion_plugin || "",
@@ -81,17 +81,7 @@ const ImagenForm = ({ plugin, modo = "crear", onSubmit, onCancelar }) => {
 				</div>
 
 				<div className="campo-formulario acciones-formulario">
-					<Boton
-						label={modo === "crear" ? "Guardar imagen" : "Guardar cambios"}
-						variant="form_action"
-						type="submit"
-					/>
-					<Boton
-						label="Cancelar"
-						variant="form_action"
-						type="button"
-						onClick={onCancelar}
-					/>
+					<Boton label="Suprimir" variant="form_action" type="submit" />
 				</div>
 			</form>
 		</div>

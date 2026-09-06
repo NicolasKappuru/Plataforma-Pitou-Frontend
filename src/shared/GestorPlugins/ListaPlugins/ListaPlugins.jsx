@@ -9,16 +9,13 @@ const claveDe = (plugin) => `${plugin?.tipo}-${plugin?.id}`;
 const normalizarItems = (lista) =>
 	lista.map((plugin, index) => ({ ...plugin, posicion: index }));
 
-const quitarId = (objeto) => {
-	const copia = { ...objeto };
-	delete copia.id;
-	return copia;
-};
-
-const quitarTipo = (objeto) => {
-	const copia = { ...objeto };
-	delete copia.tipo;
-	return copia;
+const esVacio = (plugin) => {
+	if (plugin.nombre_plugin?.trim()) return false;
+	if (plugin.descripcion_plugin?.trim()) return false;
+	if (plugin.tipo === "imagen") return !plugin.url_imagen;
+	if (plugin.tipo === "bloque_codigo") return !plugin.contenido_codigo;
+	if (plugin.tipo === "formula") return !plugin.expresion_formula;
+	return true;
 };
 
 const ListaPlugins = ({ plugins = [], opciones = [], onAgregar, onActualizar, onEliminar, onCambioOrden }) => {
@@ -29,6 +26,9 @@ const ListaPlugins = ({ plugins = [], opciones = [], onAgregar, onActualizar, on
 	if (plugins !== pluginsAnteriores) {
 		setPluginsAnteriores(plugins);
 		setItems(normalizarItems(plugins));
+		if (activo && !plugins.some((plugin) => claveDe(plugin) === activo.clave)) {
+			setActivo(null);
+		}
 	}
 
 	const opcionDe = (tipo) => opciones.find((opcion) => opcion.tipo === tipo);
@@ -75,35 +75,42 @@ const ListaPlugins = ({ plugins = [], opciones = [], onAgregar, onActualizar, on
 		setActivo({ clave: claveDe(plugin), modo: "editar" });
 	};
 
-	const manejarGuardar = (datos) => {
+	const manejarCerrarFormulario = (datos) => {
 		if (!activo) return;
 
 		const plugin = items.find((item) => claveDe(item) === activo.clave);
 		if (!plugin) return;
 
-		if (activo.modo === "crear") {
-			const datosNuevos = quitarId({ ...plugin, ...datos });
-			onAgregar?.(datosNuevos);
+		const actualizado = { ...plugin, ...datos };
+
+		if (activo.modo === "crear" && esVacio(actualizado)) {
 			setItems((prev) => prev.filter((item) => claveDe(item) !== activo.clave));
-			console.log("JSON a enviar (crear):", JSON.stringify(quitarTipo(datosNuevos), null, 2));
+			setActivo(null);
+			return;
+		}
+
+		setItems((prev) =>
+			prev.map((item) => (claveDe(item) === activo.clave ? actualizado : item))
+		);
+
+		if (activo.modo === "crear") {
+			onAgregar?.(actualizado);
 		} else {
-			const datosActualizados = { ...plugin, ...datos };
-			onActualizar?.(datosActualizados);
-			console.log("JSON a enviar (editar):", JSON.stringify(quitarTipo(datosActualizados), null, 2));
+			onActualizar?.(actualizado);
 		}
 
 		setActivo(null);
 	};
 
-	const cerrarFormulario = () => {
-		if (activo?.modo === "crear") {
-			setItems((prev) => prev.filter((item) => claveDe(item) !== activo.clave));
-		}
-		setActivo(null);
+	const manejarEliminar = (plugin) => {
+		if (activo?.clave === claveDe(plugin)) setActivo(null);
+		setItems((prev) => prev.filter((item) => claveDe(item) !== claveDe(plugin)));
+		onEliminar?.(plugin);
 	};
 
 	return (
 		<div className="lista-plugins">
+			<span className="lista-plugins__subtitulo">Plugins</span>
 			<div className="lista-plugins__items">
 				{items.map((plugin, index) => {
 					const esActivo = activo?.clave === claveDe(plugin);
@@ -116,15 +123,14 @@ const ListaPlugins = ({ plugins = [], opciones = [], onAgregar, onActualizar, on
 									<Formulario
 										plugin={plugin}
 										modo={activo.modo}
-										onSubmit={manejarGuardar}
-										onCancelar={cerrarFormulario}
+										onSubmit={manejarCerrarFormulario}
 									/>
 								) : (
 									<PluginCard
 										plugin={plugin}
 										icono={opcionDe(plugin.tipo)?.icono}
 										onEditar={() => manejarEditar(plugin)}
-										onEliminar={() => onEliminar?.(plugin)}
+										onEliminar={() => manejarEliminar(plugin)}
 									/>
 								)}
 							</div>

@@ -5,6 +5,12 @@
 	width: 100%;
 }
 
+.lista-plugins__subtitulo {
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--text-muted);
+}
+
 .lista-plugins__items {
 	display: flex;
 	flex-direction: column;

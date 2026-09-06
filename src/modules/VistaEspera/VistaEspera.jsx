@@ -20,6 +20,24 @@ const VistaEspera = () => {
     const [nombre, setNombre] = useState("");
     const [pluginsDemo, setPluginsDemo] = useState(crearPluginsDemo);
 
+    const manejarAgregar = (plugin) => {
+        setPluginsDemo((previos) => [...previos, plugin]);
+    };
+
+    const manejarActualizar = (plugin) => {
+        setPluginsDemo((previos) =>
+            previos.map((item) =>
+                `${item.tipo}-${item.id}` === `${plugin.tipo}-${plugin.id}` ? plugin : item
+            )
+        );
+    };
+
+    const manejarEliminar = (plugin) => {
+        setPluginsDemo((previos) =>
+            previos.filter((item) => `${item.tipo}-${item.id}` !== `${plugin.tipo}-${plugin.id}`)
+        );
+    };
+
     useEffect(()=>{
             obtenerNombre()
             .then(response=>{
@@ -38,6 +56,9 @@ const VistaEspera = () => {
             <ListaPlugins
                 plugins={pluginsDemo}
                 opciones={opcionesPlugins}
+                onAgregar={manejarAgregar}
+                onActualizar={manejarActualizar}
+                onEliminar={manejarEliminar}
                 onCambioOrden={setPluginsDemo}
             />
         </div>

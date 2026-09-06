@@ -3,7 +3,7 @@ import "./FormularioForm.css";
 import ToolbarFormula from "../ToolbarFormula/ToolbarFormula";
 import Boton from "../../../shared/Boton/Boton";
 
-const FormularioForm = ({ plugin, modo = "crear", onSubmit, onCancelar }) => {
+const FormularioForm = ({ plugin, modo = "crear", onSubmit }) => {
 	const [form, setForm] = useState(() => ({
 		nombre_plugin: plugin?.nombre_plugin || "",
 		descripcion_plugin: plugin?.descripcion_plugin || "",
@@ -81,17 +81,7 @@ const FormularioForm = ({ plugin, modo = "crear", onSubmit, onCancelar }) => {
 				</div>
 
 				<div className="campo-formulario acciones-formulario">
-					<Boton
-						label={modo === "crear" ? "Guardar fórmula" : "Guardar cambios"}
-						variant="form_action"
-						type="submit"
-					/>
-					<Boton
-						label="Cancelar"
-						variant="form_action"
-						type="button"
-						onClick={onCancelar}
-					/>
+					<Boton label="Suprimir" variant="form_action" type="submit" />
 				</div>
 			</form>
 		</div>

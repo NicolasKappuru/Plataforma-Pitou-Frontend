@@ -24,7 +24,7 @@ const LENGUAJES = [
 const lenguajeMonaco = (valor) =>
 	LENGUAJES.find((lenguaje) => lenguaje.valor === valor)?.monaco || "plaintext";
 
-const BloqueCodigoForm = ({ plugin, modo = "crear", onSubmit, onCancelar }) => {
+const BloqueCodigoForm = ({ plugin, modo = "crear", onSubmit }) => {
 	const [form, setForm] = useState(() => ({
 		nombre_plugin: plugin?.nombre_plugin || "",
 		descripcion_plugin: plugin?.descripcion_plugin || "",
@@ -127,17 +127,7 @@ const BloqueCodigoForm = ({ plugin, modo = "crear", onSubmit, onCancelar }) => {
 				</div>
 
 				<div className="campo-formulario acciones-formulario">
-					<Boton
-						label={modo === "crear" ? "Guardar bloque de código" : "Guardar cambios"}
-						variant="form_action"
-						type="submit"
-					/>
-					<Boton
-						label="Cancelar"
-						variant="form_action"
-						type="button"
-						onClick={onCancelar}
-					/>
+					<Boton label="Suprimir" variant="form_action" type="submit" />
 				</div>
 			</form>
 		</div>
