@@ -54,14 +54,3 @@
 	flex: 1;
 	min-width: 0;
 }
-
-.lista-plugins__form {
-	width: 100%;
-}
-
-.lista-plugins__form-acciones {
-	display: flex;
-	justify-content: center;
-	gap: 14px;
-	margin: 14px 0 4px;
-}

@@ -1,12 +1,13 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 import "./ListaPlugins.css";
 import OpcionesPlugins from "../OpcionesPlugins/OpcionesPlugins";
 import PluginCard from "../../../plugins/Plugin/PluginCard/PluginCard";
-import Boton from "../../Boton/Boton";
+
+const claveDe = (plugin) => `${plugin?.tipo}-${plugin?.id}`;
 
 const normalizarItems = (lista) =>
-	lista.map((plugin, index) => ({ ...plugin, posicion: plugin.posicion ?? index }));
+	lista.map((plugin, index) => ({ ...plugin, posicion: index }));
 
 const quitarId = (objeto) => {
 	const copia = { ...objeto };
@@ -14,11 +15,16 @@ const quitarId = (objeto) => {
 	return copia;
 };
 
+const quitarTipo = (objeto) => {
+	const copia = { ...objeto };
+	delete copia.tipo;
+	return copia;
+};
+
 const ListaPlugins = ({ plugins = [], opciones = [], onAgregar, onActualizar, onEliminar, onCambioOrden }) => {
 	const [items, setItems] = useState(() => normalizarItems(plugins));
 	const [pluginsAnteriores, setPluginsAnteriores] = useState(plugins);
 	const [activo, setActivo] = useState(null);
-	const formRef = useRef(null);
 
 	if (plugins !== pluginsAnteriores) {
 		setPluginsAnteriores(plugins);
@@ -62,24 +68,28 @@ const ListaPlugins = ({ plugins = [], opciones = [], onAgregar, onActualizar, on
 		};
 
 		setItems((prev) => [...prev, nuevo]);
-		setActivo({ id: nuevo.id, modo: "crear" });
+		setActivo({ clave: claveDe(nuevo), modo: "crear" });
 	};
 
 	const manejarEditar = (plugin) => {
-		setActivo({ id: plugin.id, modo: "editar" });
+		setActivo({ clave: claveDe(plugin), modo: "editar" });
 	};
 
 	const manejarGuardar = (datos) => {
 		if (!activo) return;
 
-		const plugin = items.find((item) => item.id === activo.id);
+		const plugin = items.find((item) => claveDe(item) === activo.clave);
 		if (!plugin) return;
 
 		if (activo.modo === "crear") {
-			onAgregar?.(quitarId({ ...plugin, ...datos }));
-			setItems((prev) => prev.filter((item) => item.id !== activo.id));
+			const datosNuevos = quitarId({ ...plugin, ...datos });
+			onAgregar?.(datosNuevos);
+			setItems((prev) => prev.filter((item) => claveDe(item) !== activo.clave));
+			console.log("JSON a enviar (crear):", JSON.stringify(quitarTipo(datosNuevos), null, 2));
 		} else {
-			onActualizar?.({ ...plugin, ...datos });
+			const datosActualizados = { ...plugin, ...datos };
+			onActualizar?.(datosActualizados);
+			console.log("JSON a enviar (editar):", JSON.stringify(quitarTipo(datosActualizados), null, 2));
 		}
 
 		setActivo(null);
@@ -87,7 +97,7 @@ const ListaPlugins = ({ plugins = [], opciones = [], onAgregar, onActualizar, on
 
 	const cerrarFormulario = () => {
 		if (activo?.modo === "crear") {
-			setItems((prev) => prev.filter((item) => item.id !== activo.id));
+			setItems((prev) => prev.filter((item) => claveDe(item) !== activo.clave));
 		}
 		setActivo(null);
 	};
@@ -96,35 +106,19 @@ const ListaPlugins = ({ plugins = [], opciones = [], onAgregar, onActualizar, on
 		<div className="lista-plugins">
 			<div className="lista-plugins__items">
 				{items.map((plugin, index) => {
-					const esActivo = activo?.id === plugin.id;
+					const esActivo = activo?.clave === claveDe(plugin);
 					const Formulario = encontrarFormulario(plugin.tipo);
 
 					return (
-						<div className="lista-plugins__fila" key={plugin.id}>
+						<div className="lista-plugins__fila" key={claveDe(plugin)}>
 							<div className="lista-plugins__contenido">
 								{esActivo && Formulario ? (
-									<div className="lista-plugins__form">
-										<Formulario
-											plugin={plugin}
-											modo={activo.modo}
-											onSubmit={manejarGuardar}
-											formRef={formRef}
-										/>
-										<div className="lista-plugins__form-acciones">
-											<Boton
-												label={activo.modo === "crear" ? "Guardar plugin" : "Guardar cambios"}
-												variant="form_action"
-												type="button"
-												onClick={() => formRef.current?.requestSubmit()}
-											/>
-											<Boton
-												label="Cancelar"
-												variant="form_action"
-												type="button"
-												onClick={cerrarFormulario}
-											/>
-										</div>
-									</div>
+									<Formulario
+										plugin={plugin}
+										modo={activo.modo}
+										onSubmit={manejarGuardar}
+										onCancelar={cerrarFormulario}
+									/>
 								) : (
 									<PluginCard
 										plugin={plugin}

@@ -9,7 +9,7 @@ import { imagenesPrueba } from "../../assets/imagenes_prueba";
 import { bloquesCodigo } from "../../assets/bloques_codigo";
 import { formulasPruebas } from "../../assets/formulas_pruebas";
 
-const pluginsDemo = [
+const crearPluginsDemo = () => [
     ...imagenesPrueba.map((plugin) => ({ ...plugin, tipo: "imagen" })),
     ...bloquesCodigo.map((plugin) => ({ ...plugin, tipo: "bloque_codigo" })),
     ...formulasPruebas.map((plugin) => ({ ...plugin, tipo: "formula" })),
@@ -18,6 +18,7 @@ const pluginsDemo = [
 const VistaEspera = () => {
 
     const [nombre, setNombre] = useState("");
+    const [pluginsDemo, setPluginsDemo] = useState(crearPluginsDemo);
 
     useEffect(()=>{
             obtenerNombre()
@@ -34,7 +35,11 @@ const VistaEspera = () => {
             <div className="vista-espera">  En construccion...</div>
             <h1 className="nombre-prueba"> {nombre} </h1>
 
-            <ListaPlugins plugins={pluginsDemo} opciones={opcionesPlugins} />
+            <ListaPlugins
+                plugins={pluginsDemo}
+                opciones={opcionesPlugins}
+                onCambioOrden={setPluginsDemo}
+            />
         </div>
     )
 }

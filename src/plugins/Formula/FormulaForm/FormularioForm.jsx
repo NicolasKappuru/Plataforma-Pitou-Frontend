@@ -1,9 +1,13 @@
 import { useState } from "react";
 import "./FormularioForm.css";
+import ToolbarFormula from "../ToolbarFormula/ToolbarFormula";
+import Boton from "../../../shared/Boton/Boton";
 
-const FormularioForm = ({ plugin, modo = "crear", onSubmit, formRef }) => {
+const FormularioForm = ({ plugin, modo = "crear", onSubmit, onCancelar }) => {
 	const [form, setForm] = useState(() => ({
 		nombre_plugin: plugin?.nombre_plugin || "",
+		descripcion_plugin: plugin?.descripcion_plugin || "",
+		expresion_formula: plugin?.expresion_formula || "",
 	}));
 
 	const [pluginAnterior, setPluginAnterior] = useState(plugin);
@@ -12,6 +16,8 @@ const FormularioForm = ({ plugin, modo = "crear", onSubmit, formRef }) => {
 		setPluginAnterior(plugin);
 		setForm({
 			nombre_plugin: plugin?.nombre_plugin || "",
+			descripcion_plugin: plugin?.descripcion_plugin || "",
+			expresion_formula: plugin?.expresion_formula || "",
 		});
 	}
 
@@ -28,14 +34,16 @@ const FormularioForm = ({ plugin, modo = "crear", onSubmit, formRef }) => {
 	return (
 		<div className="contenedor-formulario">
 			<form
-				ref={formRef}
 				className={`formula-form formula-form--${modo}`}
 				onSubmit={handleSubmit}
 			>
-				<div className="nombre-plugin">
-					<label className="label-nombre"> Nombre del plugin </label>
+				<div className="campo-formulario">
+					<label className="label-campo" htmlFor="nombre_plugin">
+						Nombre de la fórmula
+					</label>
 					<input
-						className="input-nombre"
+						className="input-campo"
+						id="nombre_plugin"
 						type="text"
 						name="nombre_plugin"
 						value={form.nombre_plugin}
@@ -44,6 +52,45 @@ const FormularioForm = ({ plugin, modo = "crear", onSubmit, formRef }) => {
 						autoCorrect="off"
 						spellCheck={false}
 						data-form-type="other"
+					/>
+				</div>
+
+				<div className="campo-formulario">
+					<label className="label-campo" htmlFor="descripcion_plugin">
+						Descripción de la fórmula
+					</label>
+					<textarea
+						className="input-campo input-descripcion"
+						id="descripcion_plugin"
+						name="descripcion_plugin"
+						rows="3"
+						value={form.descripcion_plugin}
+						onChange={handleChange}
+						placeholder="Escribe una descripción para la fórmula"
+					/>
+				</div>
+
+				<div className="campo-formulario">
+					<label className="label-campo">Expresión de la fórmula</label>
+					<ToolbarFormula
+						valor={form.expresion_formula}
+						onChange={(expresion) =>
+							setForm((prev) => ({ ...prev, expresion_formula: expresion }))
+						}
+					/>
+				</div>
+
+				<div className="campo-formulario acciones-formulario">
+					<Boton
+						label={modo === "crear" ? "Guardar fórmula" : "Guardar cambios"}
+						variant="form_action"
+						type="submit"
+					/>
+					<Boton
+						label="Cancelar"
+						variant="form_action"
+						type="button"
+						onClick={onCancelar}
 					/>
 				</div>
 			</form>

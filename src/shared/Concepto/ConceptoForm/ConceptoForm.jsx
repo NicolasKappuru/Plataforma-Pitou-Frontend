@@ -114,11 +114,11 @@ const ConceptoForm = ({ valoresIniciales, modo = "crear", onSubmit, formRef }) =
                 </div>
             </form>
             
-            {/*
+            
             <div className="gestor-plugins">
                  <ListaPlugins plugins={pluginsDemo} opciones={opcionesPlugins} /> 
             </div>
-        */}
+        
 
         </div>
     );

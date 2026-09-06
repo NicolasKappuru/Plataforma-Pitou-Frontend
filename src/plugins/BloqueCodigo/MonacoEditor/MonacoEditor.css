@@ -1,0 +1,7 @@
+.monaco-editor {
+	width: 100%;
+	margin-top: 10px;
+	border: 1px solid var(--border-input);
+	border-radius: 8px;
+	overflow: hidden;
+}

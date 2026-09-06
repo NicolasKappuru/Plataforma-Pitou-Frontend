@@ -1,0 +1,98 @@
+.toolbar-formula {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	width: 100%;
+}
+
+.toolbar-formula__barra {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 0;
+	background-color: var(--bg-input);
+	border: 1px solid var(--border-input);
+	border-radius: 8px;
+	padding: 6px;
+}
+
+.toolbar-formula__grupo {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 2px;
+	padding: 0 6px;
+}
+
+.toolbar-formula__grupo + .toolbar-formula__grupo {
+	border-left: 1px solid var(--border-faint);
+}
+
+.toolbar-formula__boton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 32px;
+	height: 32px;
+	padding: 0 6px;
+	border: none;
+	border-radius: 6px;
+	background-color: transparent;
+	color: var(--text-muted);
+	font-size: 15px;
+	font-family: inherit;
+	cursor: pointer;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.toolbar-formula__boton:hover {
+	background-color: var(--bg-active);
+	color: var(--text-primary);
+}
+
+.toolbar-formula__boton:active {
+	background-color: var(--accent);
+	color: #ffffff;
+}
+
+.toolbar-formula__area {
+	background-color: var(--bg-input);
+	border: 1px solid var(--border-input);
+	border-radius: 8px;
+	padding: 10px 14px;
+	font-size: 14px;
+	font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+	color: var(--text-primary);
+	resize: none;
+	line-height: 1.5;
+}
+
+.toolbar-formula__area:focus {
+	outline: none;
+	border-color: var(--accent);
+}
+
+.toolbar-formula__preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 52px;
+	padding: 10px 14px;
+	border: 1px dashed var(--border-input);
+	border-radius: 8px;
+	background-color: var(--bg-surface);
+}
+
+.toolbar-formula__preview .katex-display {
+	margin: 0;
+	font-size: 20px;
+	color: var(--text-primary);
+}
+
+.toolbar-formula__preview .katex {
+	color: var(--text-primary);
+}
+
+.toolbar-formula__preview--vacio {
+	color: var(--text-muted);
+	font-size: 14px;
+}
