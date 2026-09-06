@@ -39,6 +39,23 @@ const prepararActualizacionJson = (plugin) => {
     return copia;
 };
 
+const valorComparable = (valor) => JSON.stringify(valor ?? "");
+
+const pluginCambio = (actual, inicial) => {
+    if (!actual || !inicial) return true;
+
+    const campos = [
+        "nombre_plugin",
+        "descripcion_plugin",
+        "url_imagen",
+        "contenido_codigo",
+        "lenguaje_programacion",
+        "expresion_formula",
+    ];
+
+    return campos.some((campo) => valorComparable(actual[campo]) !== valorComparable(inicial[campo]));
+};
+
 const dataUrlAArchivo = async (url, indice) => {
     if (!url?.startsWith("data:")) {
         throw new Error(`La imagen nueva ${indice + 1} no tiene un archivo válido`);
@@ -62,7 +79,13 @@ const guardarImagenes = async (concepto, actuales, iniciales) => {
         });
     }
 
-    const actualizadas = actuales.filter(tieneId).map(sinCamposGestionados);
+    const actualizadas = actuales
+        .filter(tieneId)
+        .filter((plugin) => {
+            const inicial = iniciales.find((item) => `${item.id}` === `${plugin.id}`);
+            return pluginCambio(plugin, inicial);
+        })
+        .map(sinCamposGestionados);
     if (actualizadas.length) await actualizarImagen({ imagenes: actualizadas });
 
     const idsEliminados = iniciales
@@ -78,7 +101,13 @@ const guardarTipoJson = async ({ concepto, actuales, iniciales, crear, actualiza
         .map((plugin) => prepararPluginJson(plugin, concepto));
     if (nuevas.length) await crear({ [campo]: nuevas });
 
-    const actualizadas = actuales.filter(tieneId).map(prepararActualizacionJson);
+    const actualizadas = actuales
+        .filter(tieneId)
+        .filter((plugin) => {
+            const inicial = iniciales.find((item) => `${item.id}` === `${plugin.id}`);
+            return pluginCambio(plugin, inicial);
+        })
+        .map(prepararActualizacionJson);
     if (actualizadas.length) await actualizar({ [campo]: actualizadas });
 
     const idsEliminados = iniciales
