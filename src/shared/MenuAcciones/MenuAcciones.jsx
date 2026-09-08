@@ -23,11 +23,9 @@ const MenuAcciones = ({ entidad, data, concepto, onEliminar, onEstadoMenu }) => 
   const toggle = (e) => {
       e.stopPropagation()
 
-      setAbierto((prev) => {
-          const nuevoEstado = !prev
-          onEstadoMenu?.(nuevoEstado)
-          return nuevoEstado
-      })
+      const nuevoEstado = !abierto
+      setAbierto(nuevoEstado)
+      onEstadoMenu?.(nuevoEstado)
   }
 
   const nombreEntidad = typeof entidad === "string" ? entidad : "concepto"

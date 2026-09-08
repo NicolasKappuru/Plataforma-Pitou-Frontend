@@ -20,16 +20,7 @@ const esVacio = (plugin) => {
 
 const ListaPlugins = ({ plugins = [], opciones = [], onAgregar, onActualizar, onEliminar, onCambioOrden }) => {
 	const [items, setItems] = useState(() => normalizarItems(plugins));
-	const [pluginsAnteriores, setPluginsAnteriores] = useState(plugins);
 	const [activo, setActivo] = useState(null);
-
-	if (plugins !== pluginsAnteriores) {
-		setPluginsAnteriores(plugins);
-		setItems(normalizarItems(plugins));
-		if (activo && !plugins.some((plugin) => claveDe(plugin) === activo.clave)) {
-			setActivo(null);
-		}
-	}
 
 	const opcionDe = (tipo) => opciones.find((opcion) => opcion.tipo === tipo);
 
@@ -102,6 +93,29 @@ const ListaPlugins = ({ plugins = [], opciones = [], onAgregar, onActualizar, on
 		setActivo(null);
 	};
 
+	const manejarCambioFormulario = (datos) => {
+		if (!activo) return;
+
+		const plugin = items.find((item) => claveDe(item) === activo.clave);
+		if (!plugin) return;
+
+		const actualizado = { ...plugin, ...datos };
+		setItems((prev) => prev.map((item) => (
+			claveDe(item) === activo.clave ? actualizado : item
+		)));
+
+		if (activo.modo === "crear" && esVacio(actualizado)) {
+			onEliminar?.(actualizado);
+			return;
+		}
+
+		if (activo.modo === "crear") {
+			onAgregar?.(actualizado);
+		} else {
+			onActualizar?.(actualizado);
+		}
+	};
+
 	const manejarEliminar = (plugin) => {
 		if (activo?.clave === claveDe(plugin)) setActivo(null);
 		setItems((prev) => prev.filter((item) => claveDe(item) !== claveDe(plugin)));
@@ -121,8 +135,10 @@ const ListaPlugins = ({ plugins = [], opciones = [], onAgregar, onActualizar, on
 							<div className="lista-plugins__contenido">
 								{esActivo && Formulario ? (
 									<Formulario
+										key={`${claveDe(plugin)}-${activo.modo}`}
 										plugin={plugin}
 										modo={activo.modo}
+										onChange={manejarCambioFormulario}
 										onSubmit={manejarCerrarFormulario}
 									/>
 								) : (

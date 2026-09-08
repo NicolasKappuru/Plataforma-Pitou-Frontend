@@ -38,6 +38,7 @@ const ConceptoForm = ({
     onSubmit,
     formRef,
     plugins,
+    pluginsIniciales,
     onAgregarPlugin,
     onActualizarPlugin,
     onEliminarPlugin,
@@ -104,6 +105,7 @@ const ConceptoForm = ({
             
             <div className="gestor-plugins">
                   <ListaPlugins
+                      key={pluginsIniciales?.map((plugin) => `${plugin.tipo}-${plugin.id}`).join("|") || "sin-plugins-iniciales"}
                     plugins={plugins}
                     opciones={opcionesPlugins}
                     onAgregar={onAgregarPlugin}

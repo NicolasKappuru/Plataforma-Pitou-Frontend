@@ -24,7 +24,7 @@ const LENGUAJES = [
 const lenguajeMonaco = (valor) =>
 	LENGUAJES.find((lenguaje) => lenguaje.valor === valor)?.monaco || "plaintext";
 
-const BloqueCodigoForm = ({ plugin, modo = "crear", onSubmit }) => {
+const BloqueCodigoForm = ({ plugin, modo = "crear", onSubmit, onChange }) => {
 	const [form, setForm] = useState(() => ({
 		nombre_plugin: plugin?.nombre_plugin || "",
 		descripcion_plugin: plugin?.descripcion_plugin || "",
@@ -32,21 +32,11 @@ const BloqueCodigoForm = ({ plugin, modo = "crear", onSubmit }) => {
 		contenido_codigo: plugin?.contenido_codigo || "",
 	}));
 
-	const [pluginAnterior, setPluginAnterior] = useState(plugin);
-
-	if (plugin !== pluginAnterior) {
-		setPluginAnterior(plugin);
-		setForm({
-			nombre_plugin: plugin?.nombre_plugin || "",
-			descripcion_plugin: plugin?.descripcion_plugin || "",
-			lenguaje_programacion: plugin?.lenguaje_programacion || "python",
-			contenido_codigo: plugin?.contenido_codigo || "",
-		});
-	}
-
 	const handleChange = (event) => {
 		const { name, value } = event.target;
-		setForm((prev) => ({ ...prev, [name]: value }));
+		const actualizado = { ...form, [name]: value };
+		setForm(actualizado);
+		onChange?.(actualizado);
 	};
 
 	const handleSubmit = (event) => {
@@ -120,9 +110,11 @@ const BloqueCodigoForm = ({ plugin, modo = "crear", onSubmit }) => {
 					<MonacoEditor
 						lenguaje={lenguajeMonaco(form.lenguaje_programacion)}
 						valor={form.contenido_codigo}
-						onChange={(codigo) =>
-							setForm((prev) => ({ ...prev, contenido_codigo: codigo }))
-						}
+						onChange={(codigo) => {
+							const actualizado = { ...form, contenido_codigo: codigo };
+							setForm(actualizado);
+							onChange?.(actualizado);
+						}}
 					/>
 				</div>
 

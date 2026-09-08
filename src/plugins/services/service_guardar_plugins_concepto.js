@@ -70,6 +70,7 @@ const dataUrlAArchivo = async (url, indice) => {
 const guardarImagenes = async (concepto, actuales, iniciales) => {
     const nuevas = actuales.filter((plugin) => !tieneId(plugin));
     if (nuevas.length) {
+        console.info("[Plugins] POST imágenes", { concepto, cantidad: nuevas.length });
         const imagenes = await Promise.all(nuevas.map((plugin, indice) => dataUrlAArchivo(plugin.url_imagen, indice)));
         await crearImagen({
             concepto,
@@ -86,20 +87,29 @@ const guardarImagenes = async (concepto, actuales, iniciales) => {
             return pluginCambio(plugin, inicial);
         })
         .map(sinCamposGestionados);
-    if (actualizadas.length) await actualizarImagen({ imagenes: actualizadas });
+    if (actualizadas.length) {
+        console.info("[Plugins] PUT imágenes", { cantidad: actualizadas.length });
+        await actualizarImagen({ imagenes: actualizadas });
+    }
 
     const idsEliminados = iniciales
         .filter(tieneId)
         .filter((plugin) => !actuales.some((actual) => `${actual.id}` === `${plugin.id}`))
         .map((plugin) => plugin.id);
-    if (idsEliminados.length) await eliminarImagen({ ids: idsEliminados });
+    if (idsEliminados.length) {
+        console.info("[Plugins] DELETE imágenes", { ids: idsEliminados });
+        await eliminarImagen({ ids: idsEliminados });
+    }
 };
 
 const guardarTipoJson = async ({ concepto, actuales, iniciales, crear, actualizar, eliminar, campo }) => {
     const nuevas = actuales
         .filter((plugin) => !tieneId(plugin))
         .map((plugin) => prepararPluginJson(plugin, concepto));
-    if (nuevas.length) await crear({ [campo]: nuevas });
+    if (nuevas.length) {
+        console.info(`[Plugins] POST ${campo}`, { concepto, cantidad: nuevas.length, payload: nuevas });
+        await crear({ [campo]: nuevas });
+    }
 
     const actualizadas = actuales
         .filter(tieneId)
@@ -108,17 +118,29 @@ const guardarTipoJson = async ({ concepto, actuales, iniciales, crear, actualiza
             return pluginCambio(plugin, inicial);
         })
         .map(prepararActualizacionJson);
-    if (actualizadas.length) await actualizar({ [campo]: actualizadas });
+    if (actualizadas.length) {
+        console.info(`[Plugins] PUT ${campo}`, { cantidad: actualizadas.length, payload: actualizadas });
+        await actualizar({ [campo]: actualizadas });
+    }
 
     const idsEliminados = iniciales
         .filter(tieneId)
         .filter((plugin) => !actuales.some((actual) => `${actual.id}` === `${plugin.id}`))
         .map((plugin) => plugin.id);
-    if (idsEliminados.length) await eliminar({ ids: idsEliminados });
+    if (idsEliminados.length) {
+        console.info(`[Plugins] DELETE ${campo}`, { ids: idsEliminados });
+        await eliminar({ ids: idsEliminados });
+    }
 };
 
 const guardarPluginsConcepto = async ({ concepto, plugins = [], pluginsIniciales = [] }) => {
     if (!concepto) throw new Error("Se requiere el id del concepto para guardar sus plugins");
+
+    console.info("[Plugins] Inicio persistencia", {
+        concepto,
+        cantidadActual: plugins.length,
+        cantidadInicial: pluginsIniciales.length,
+    });
 
     const porTipo = (tipo) => ({
         actuales: plugins.filter((plugin) => (plugin.tipo || plugin.tipo_plugin) === tipo),

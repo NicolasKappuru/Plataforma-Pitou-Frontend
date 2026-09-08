@@ -15,10 +15,10 @@
 }
 
 .formula-detalle__descripcion {
-	margin-top: 8px;
-	color: var(--text-muted);
-	font-size: 16px;
-	line-height: 1.6;
+	margin: 10px 0 20px;
+	color: var(--text-primary);
+	font-family: "Inter", sans-serif;
+	font-size: 20px;
 }
 
 .formula-detalle__expresion {

@@ -3,27 +3,18 @@ import "./FormularioForm.css";
 import ToolbarFormula from "../ToolbarFormula/ToolbarFormula";
 import Boton from "../../../shared/Boton/Boton";
 
-const FormularioForm = ({ plugin, modo = "crear", onSubmit }) => {
+const FormularioForm = ({ plugin, modo = "crear", onSubmit, onChange }) => {
 	const [form, setForm] = useState(() => ({
 		nombre_plugin: plugin?.nombre_plugin || "",
 		descripcion_plugin: plugin?.descripcion_plugin || "",
 		expresion_formula: plugin?.expresion_formula || "",
 	}));
 
-	const [pluginAnterior, setPluginAnterior] = useState(plugin);
-
-	if (plugin !== pluginAnterior) {
-		setPluginAnterior(plugin);
-		setForm({
-			nombre_plugin: plugin?.nombre_plugin || "",
-			descripcion_plugin: plugin?.descripcion_plugin || "",
-			expresion_formula: plugin?.expresion_formula || "",
-		});
-	}
-
 	const handleChange = (event) => {
 		const { name, value } = event.target;
-		setForm((prev) => ({ ...prev, [name]: value }));
+		const actualizado = { ...form, [name]: value };
+		setForm(actualizado);
+		onChange?.(actualizado);
 	};
 
 	const handleSubmit = (event) => {
@@ -74,9 +65,11 @@ const FormularioForm = ({ plugin, modo = "crear", onSubmit }) => {
 					<label className="label-campo">Expresión de la fórmula</label>
 					<ToolbarFormula
 						valor={form.expresion_formula}
-						onChange={(expresion) =>
-							setForm((prev) => ({ ...prev, expresion_formula: expresion }))
-						}
+						onChange={(expresion) => {
+							const actualizado = { ...form, expresion_formula: expresion };
+							setForm(actualizado);
+							onChange?.(actualizado);
+						}}
 					/>
 				</div>
 

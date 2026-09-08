@@ -3,27 +3,18 @@ import "./ImagenForm.css";
 import UploadOption from "../UploadOption/UploadOption";
 import Boton from "../../../shared/Boton/Boton";
 
-const ImagenForm = ({ plugin, modo = "crear", onSubmit }) => {
+const ImagenForm = ({ plugin, modo = "crear", onSubmit, onChange }) => {
 	const [form, setForm] = useState(() => ({
 		nombre_plugin: plugin?.nombre_plugin || "",
 		descripcion_plugin: plugin?.descripcion_plugin || "",
 		url_imagen: plugin?.url_imagen || "",
 	}));
 
-	const [pluginAnterior, setPluginAnterior] = useState(plugin);
-
-	if (plugin !== pluginAnterior) {
-		setPluginAnterior(plugin);
-		setForm({
-			nombre_plugin: plugin?.nombre_plugin || "",
-			descripcion_plugin: plugin?.descripcion_plugin || "",
-			url_imagen: plugin?.url_imagen || "",
-		});
-	}
-
 	const handleChange = (event) => {
 		const { name, value } = event.target;
-		setForm((prev) => ({ ...prev, [name]: value }));
+		const actualizado = { ...form, [name]: value };
+		setForm(actualizado);
+		onChange?.(actualizado);
 	};
 
 	const handleSubmit = (event) => {
@@ -74,9 +65,11 @@ const ImagenForm = ({ plugin, modo = "crear", onSubmit }) => {
 					<label className="label-campo">Imagen</label>
 					<UploadOption
 						value={form.url_imagen}
-						onChange={(url) =>
-							setForm((prev) => ({ ...prev, url_imagen: url }))
-						}
+						onChange={(url) => {
+							const actualizado = { ...form, url_imagen: url };
+							setForm(actualizado);
+							onChange?.(actualizado);
+						}}
 					/>
 				</div>
 

@@ -15,6 +15,7 @@ const FormularioConcepto = () => {
     const navigate = useNavigate();
     const formRef = useRef(null);
     const isSubmittingRef = useRef(false);
+    const pluginsRef = useRef([]);
     const [alerta, setAlerta] = useState({ visible: false, message: "", color: "#16a34a" });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [plugins, setPlugins] = useState([]);
@@ -30,6 +31,7 @@ const FormularioConcepto = () => {
             try {
                 const pluginsCargados = await listarPluginsConcepto(valoresIniciales.id);
                 if (!cancelado) {
+                    pluginsRef.current = pluginsCargados;
                     setPlugins(pluginsCargados);
                     setPluginsIniciales(pluginsCargados);
                 }
@@ -61,9 +63,37 @@ const FormularioConcepto = () => {
     };
 
     const actualizarPluginEnEstado = (plugin) => {
-        setPlugins((previos) => previos.map((item) => (
-            `${item.tipo}-${item.id}` === `${plugin.tipo}-${plugin.id}` ? plugin : item
-        )));
+        setPlugins((previos) => {
+            const actualizados = previos.map((item) => (
+                `${item.tipo}-${item.id}` === `${plugin.tipo}-${plugin.id}` ? plugin : item
+            ));
+            pluginsRef.current = actualizados;
+            return actualizados;
+        });
+    };
+
+    const agregarPluginAlEstado = (plugin) => {
+        setPlugins((previos) => {
+            const indice = previos.findIndex((item) => `${item.tipo}-${item.id}` === `${plugin.tipo}-${plugin.id}`);
+            const actualizados = indice === -1
+                ? [...previos, plugin]
+                : previos.map((item, itemIndex) => itemIndex === indice ? plugin : item);
+            pluginsRef.current = actualizados;
+            return actualizados;
+        });
+    };
+
+    const eliminarPluginDelEstado = (plugin) => {
+        setPlugins((previos) => {
+            const actualizados = previos.filter((item) => `${item.tipo}-${item.id}` !== `${plugin.tipo}-${plugin.id}`);
+            pluginsRef.current = actualizados;
+            return actualizados;
+        });
+    };
+
+    const cambiarOrdenPlugins = (ordenados) => {
+        pluginsRef.current = ordenados;
+        setPlugins(ordenados);
     };
 
     const handleSubmit = async (formData) => {
@@ -83,9 +113,14 @@ const FormularioConcepto = () => {
                     id: valoresIniciales?.id,
                     ...payload,
                 });
+                console.info("[Plugins] Guardando plugins del concepto", {
+                    concepto: valoresIniciales?.id,
+                    cantidad: pluginsRef.current.length,
+                    tipos: pluginsRef.current.map((plugin) => plugin.tipo),
+                });
                 await guardarPluginsConcepto({
                     concepto: valoresIniciales?.id,
-                    plugins,
+                    plugins: pluginsRef.current,
                     pluginsIniciales,
                 });
                 setAlerta({ visible: true, message: "Concepto actualizado correctamente", color: "#16a34a" });
@@ -95,7 +130,12 @@ const FormularioConcepto = () => {
                 if (!conceptoId) {
                     throw new Error("El backend no devolvió el id del concepto creado");
                 }
-                await guardarPluginsConcepto({ concepto: conceptoId, plugins });
+                console.info("[Plugins] Guardando plugins del concepto", {
+                    concepto: conceptoId,
+                    cantidad: pluginsRef.current.length,
+                    tipos: pluginsRef.current.map((plugin) => plugin.tipo),
+                });
+                await guardarPluginsConcepto({ concepto: conceptoId, plugins: pluginsRef.current });
                 setAlerta({ visible: true, message: "Concepto creado correctamente", color: "#16a34a" });
             }
 
@@ -129,10 +169,11 @@ const FormularioConcepto = () => {
                 onSubmit={handleSubmit}
                 formRef={formRef}
                 plugins={plugins}
-                onAgregarPlugin={(plugin) => setPlugins((previos) => [...previos, plugin])}
+                pluginsIniciales={pluginsIniciales}
+                onAgregarPlugin={agregarPluginAlEstado}
                 onActualizarPlugin={actualizarPluginEnEstado}
-                onEliminarPlugin={(plugin) => setPlugins((previos) => previos.filter((item) => `${item.tipo}-${item.id}` !== `${plugin.tipo}-${plugin.id}`))}
-                onCambioOrdenPlugins={setPlugins}
+                onEliminarPlugin={eliminarPluginDelEstado}
+                onCambioOrdenPlugins={cambiarOrdenPlugins}
             />
             </div>
 
